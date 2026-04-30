@@ -2,11 +2,10 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 
 const footerLinks = {
-  Solutions: [
-    { label: 'Products', path: '/products' },
-    { label: 'Industries', path: '/industries' },
-    { label: 'Ecosystem', path: '/ecosystem' },
-    { label: 'Technology', path: '/technology' },
+  Platform: [
+    { label: 'Intelligence Systems', path: '/intelligence-systems' },
+    { label: 'Applications', path: '/applications' },
+    { label: 'Assessments', path: '/assessments' },
   ],
   Company: [
     { label: 'About', path: '/about' },

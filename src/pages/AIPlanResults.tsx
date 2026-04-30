@@ -1,44 +1,18 @@
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { CheckCircle2, ArrowRight, RotateCcw, Calendar, ChevronRight, Brain, Zap, TrendingUp, LayoutDashboard, Network, Cpu } from 'lucide-react'
+import { CheckCircle2, ArrowRight, RotateCcw, Calendar, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { generateAIPlan } from '@/utils/aiPlanLogic'
-import { products } from '@/data/products'
+import { intelligenceSystems } from '@/data/intelligenceSystems'
 import type { AIPlanAnswers, AIPlanResult } from '@/types'
 
-const colorMap: Record<string, 'blue' | 'purple' | 'cyan' | 'indigo'> = {
-  'decision-intelligence-engine': 'blue',
-  'ai-workflow-intelligence': 'purple',
-  'predictive-analytics-system': 'cyan',
-  'business-insight-dashboard': 'indigo',
-  'ai-agent-ecosystem': 'purple',
-  'custom-ai-system-architecture': 'blue',
-}
-
-const iconMap: Record<string, React.FC<{ size?: number; className?: string }>> = {
-  'decision-intelligence-engine': Brain,
-  'ai-workflow-intelligence': Zap,
-  'predictive-analytics-system': TrendingUp,
-  'business-insight-dashboard': LayoutDashboard,
-  'ai-agent-ecosystem': Network,
-  'custom-ai-system-architecture': Cpu,
-}
-
-const iconBgMap: Record<string, string> = {
-  'blue': 'bg-blue-500/10',
-  'purple': 'bg-purple-500/10',
-  'cyan': 'bg-cyan-500/10',
-  'indigo': 'bg-indigo-500/10',
-}
-
-const iconColorMap: Record<string, string> = {
-  'blue': 'text-blue-400',
-  'purple': 'text-purple-400',
-  'cyan': 'text-cyan-400',
-  'indigo': 'text-indigo-400',
+const systemBadgeColor = {
+  orbital: 'blue' as const,
+  magnus: 'purple' as const,
+  simfore: 'cyan' as const,
 }
 
 function fadeUp(delay = 0) {
@@ -70,8 +44,8 @@ export function AIPlanResults() {
 
   if (!result || !answers) return null
 
-  const recommendedProducts = result.recommendedProducts
-    .map((id) => products.find((p) => p.id === id))
+  const recommendedSystems = result.recommendedSystems
+    .map((id) => intelligenceSystems.find((s) => s.id === id))
     .filter(Boolean)
 
   return (
@@ -153,39 +127,42 @@ export function AIPlanResults() {
           </p>
 
           <div className="space-y-4">
-            {recommendedProducts.map((product, i) => {
-              if (!product) return null
-              const color = colorMap[product.id] ?? 'blue'
-              const Icon = iconMap[product.id] ?? Brain
-              const iconBg = iconBgMap[color]
-              const iconColor = iconColorMap[color]
-              const reason = result.productReasons[product.id]
+            {recommendedSystems.map((system, i) => {
+              if (!system) return null
+              const color = systemBadgeColor[system.id]
+              const reason = result.systemReasons[system.id]
 
               return (
                 <motion.div
-                  key={product.id}
+                  key={system.id}
                   initial={{ opacity: 0, y: 14 }}
                   animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
                   transition={{ duration: 0.4, delay: 0.24 + i * 0.1 }}
                 >
                   <Card hover className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}>
-                        <Icon size={20} className={iconColor} />
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                        style={{ background: `${system.accentHex}12`, border: `1px solid ${system.accentHex}30` }}
+                      >
+                        <span className="font-bold text-sm" style={{ color: system.accentHex }}>
+                          {system.name[0]}
+                        </span>
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <h3 className="text-white font-semibold text-sm">{product.name}</h3>
-                          <Badge color={color}>
+                          <h3 className="text-white font-semibold text-sm">{system.name}</h3>
+                          <Badge color={color}>{system.type}</Badge>
+                          <Badge color={i === 0 ? 'blue' : i === 1 ? 'purple' : 'cyan'}>
                             {i === 0 ? 'Primary' : i === 1 ? 'Strong fit' : 'Recommended'}
                           </Badge>
                         </div>
-                        <p className="text-blue-300/80 text-xs italic mb-3">{product.tagline}</p>
+                        <p className="text-slate-400 text-xs italic mb-3">{system.tagline}</p>
                         {reason && (
                           <p className="text-slate-400 text-sm leading-relaxed mb-4">{reason}</p>
                         )}
                         <Link
-                          to={`/products#${product.id}`}
+                          to={`/intelligence-systems#${system.id}`}
                           className="inline-flex items-center gap-1 text-blue-400 text-xs font-medium hover:text-blue-300 transition-colors"
                         >
                           See full capability detail <ChevronRight size={12} />

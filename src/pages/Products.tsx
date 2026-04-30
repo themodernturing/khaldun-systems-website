@@ -79,7 +79,7 @@ export function Products() {
                       <div className="lg:col-span-1">
                         <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Capabilities</h3>
                         <ul className="space-y-2">
-                          {product.capabilities.map((cap) => (
+                          {product.capabilities.map((cap: string) => (
                             <li key={cap} className="flex items-start gap-2 text-sm text-slate-300">
                               <span className={`w-1.5 h-1.5 rounded-full ${colors.bg.replace('/10', '/60')} flex-shrink-0 mt-2`} />
                               {cap}
@@ -92,7 +92,7 @@ export function Products() {
                       <div className="lg:col-span-1">
                         <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Decision Outcomes</h3>
                         <ul className="space-y-3">
-                          {product.outcomes.map((outcome) => (
+                          {product.outcomes.map((outcome: string) => (
                             <li key={outcome} className="flex items-start gap-2">
                               <CheckCircle2 size={14} className="text-green-400 flex-shrink-0 mt-0.5" />
                               <span className="text-sm text-slate-300 leading-relaxed">{outcome}</span>

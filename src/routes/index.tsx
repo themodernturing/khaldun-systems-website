@@ -1,15 +1,20 @@
 import { Routes, Route } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
 import { Home } from '@/pages/Home'
-import { Products } from '@/pages/Products'
-import { Industries } from '@/pages/Industries'
-import { Ecosystem } from '@/pages/Ecosystem'
-import { Technology } from '@/pages/Technology'
+import { IntelligenceSystems } from '@/pages/IntelligenceSystems'
+import { Applications } from '@/pages/Applications'
+import { Assessments } from '@/pages/Assessments'
 import { About } from '@/pages/About'
 import { Resources } from '@/pages/Resources'
 import { Contact } from '@/pages/Contact'
 import { AIPlan } from '@/pages/AIPlan'
 import { AIPlanResults } from '@/pages/AIPlanResults'
+
+// Legacy pages — kept for any inbound links, redirect via nav
+import { Products } from '@/pages/Products'
+import { Industries } from '@/pages/Industries'
+import { Ecosystem } from '@/pages/Ecosystem'
+import { Technology } from '@/pages/Technology'
 
 function NotFound() {
   return (
@@ -27,19 +32,25 @@ function NotFound() {
 export function AppRoutes() {
   return (
     <Routes>
-      {/* AI Plan — full-screen, no footer */}
+      {/* AI Plan — full-screen, no layout wrapper */}
       <Route path="/ai-plan" element={<AIPlan />} />
       <Route path="/ai-plan/results" element={<AIPlanResults />} />
 
-      {/* Main site layout */}
+      {/* Primary routes */}
       <Route path="/" element={<Layout><Home /></Layout>} />
+      <Route path="/intelligence-systems" element={<Layout><IntelligenceSystems /></Layout>} />
+      <Route path="/applications" element={<Layout><Applications /></Layout>} />
+      <Route path="/assessments" element={<Layout><Assessments /></Layout>} />
+      <Route path="/about" element={<Layout><About /></Layout>} />
+      <Route path="/resources" element={<Layout><Resources /></Layout>} />
+      <Route path="/contact" element={<Layout><Contact /></Layout>} />
+
+      {/* Legacy routes */}
       <Route path="/products" element={<Layout><Products /></Layout>} />
       <Route path="/industries" element={<Layout><Industries /></Layout>} />
       <Route path="/ecosystem" element={<Layout><Ecosystem /></Layout>} />
       <Route path="/technology" element={<Layout><Technology /></Layout>} />
-      <Route path="/about" element={<Layout><About /></Layout>} />
-      <Route path="/resources" element={<Layout><Resources /></Layout>} />
-      <Route path="/contact" element={<Layout><Contact /></Layout>} />
+
       <Route path="*" element={<Layout><NotFound /></Layout>} />
     </Routes>
   )

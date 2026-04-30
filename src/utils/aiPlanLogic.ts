@@ -1,6 +1,6 @@
-import type { AIPlanAnswers, AIPlanResult, BusinessContextItem } from '@/types'
+import type { AIPlanAnswers, AIPlanResult, BusinessContextItem, SystemId, ApplicationDomainId } from '@/types'
 
-// ─── Label maps (human-readable version of each answer value) ─────────────────
+// ─── Label maps ───────────────────────────────────────────────────────────────
 
 const industryLabels: Record<string, string> = {
   'education': 'Education',
@@ -45,81 +45,89 @@ const priorityLabels: Record<string, string> = {
   'customer-experience': 'A noticeably better customer experience',
 }
 
-// ─── Product scoring ──────────────────────────────────────────────────────────
+// ─── System scoring ───────────────────────────────────────────────────────────
+// ORBITAL = Diagnostic: structural understanding, visibility, lever mapping
+// MAGNUS  = Forensic:   inconsistency, hidden risk, narrative vs reality
+// SIMFORE = Simulation: prediction, scenario modelling, consequence mapping
 
-const productMap: Record<string, string[]> = {
-  'better-decisions': ['decision-intelligence-engine', 'business-insight-dashboard'],
-  'predict-outcomes': ['predictive-analytics-system', 'decision-intelligence-engine'],
-  'automate-workflows': ['ai-workflow-intelligence', 'ai-agent-ecosystem'],
-  'understand-customers': ['predictive-analytics-system', 'business-insight-dashboard'],
-  'reduce-risk': ['decision-intelligence-engine', 'predictive-analytics-system'],
-  'unified-intelligence': ['business-insight-dashboard', 'decision-intelligence-engine'],
+const systemMapByAiHelp: Record<string, SystemId[]> = {
+  'better-decisions': ['orbital', 'simfore'],
+  'predict-outcomes': ['simfore', 'orbital'],
+  'automate-workflows': ['orbital', 'simfore'],
+  'understand-customers': ['orbital', 'magnus'],
+  'reduce-risk': ['magnus', 'simfore'],
+  'unified-intelligence': ['orbital', 'magnus'],
 }
 
-const challengeProductBoosts: Record<string, string> = {
-  'slow-decisions': 'decision-intelligence-engine',
-  'poor-visibility': 'business-insight-dashboard',
-  'risk-exposure': 'predictive-analytics-system',
-  'inefficient-processes': 'ai-workflow-intelligence',
-  'growth-constraints': 'ai-agent-ecosystem',
-  'data-fragmentation': 'business-insight-dashboard',
+const challengeSystemBoosts: Record<string, SystemId> = {
+  'slow-decisions': 'orbital',
+  'poor-visibility': 'orbital',
+  'risk-exposure': 'magnus',
+  'inefficient-processes': 'orbital',
+  'growth-constraints': 'simfore',
+  'data-fragmentation': 'magnus',
 }
 
-const priorityProductBoosts: Record<string, string> = {
-  'efficiency': 'ai-workflow-intelligence',
-  'insight': 'business-insight-dashboard',
-  'risk': 'predictive-analytics-system',
-  'growth': 'ai-agent-ecosystem',
-  'decision-making': 'decision-intelligence-engine',
-  'customer-experience': 'predictive-analytics-system',
+const prioritySystemBoosts: Record<string, SystemId> = {
+  'efficiency': 'orbital',
+  'insight': 'orbital',
+  'risk': 'magnus',
+  'growth': 'simfore',
+  'decision-making': 'orbital',
+  'customer-experience': 'simfore',
 }
 
-const sizeProductBoosts: Record<string, string> = {
-  'startup': 'business-insight-dashboard',
-  'sme': 'ai-workflow-intelligence',
-  'enterprise': 'custom-ai-system-architecture',
-  'public-sector': 'decision-intelligence-engine',
+const sizeSystemBoosts: Record<string, SystemId> = {
+  'startup': 'orbital',
+  'sme': 'simfore',
+  'enterprise': 'magnus',
+  'public-sector': 'orbital',
 }
 
-// ─── Summaries ────────────────────────────────────────────────────────────────
+// ─── Domain relevance ─────────────────────────────────────────────────────────
+
+const industryDomainMap: Record<string, ApplicationDomainId[]> = {
+  'finance': ['financial', 'legal-compliance'],
+  'healthcare': ['healthcare'],
+  'education': ['education'],
+  'government': ['legal-compliance', 'esg'],
+  'retail': ['financial'],
+  'general-business': ['financial'],
+}
+
+// ─── Diagnostic summaries ─────────────────────────────────────────────────────
 
 const summaryMap: Record<string, (a: AIPlanAnswers) => string> = {
   'slow-decisions': (a) =>
-    `In ${industryLabels[a.industry] ?? 'your sector'}, slow decisions rarely mean slow thinking — they mean the intelligence isn't there when it's needed. Your leadership is likely working from fragmented data and delayed reports, making it hard to act with confidence. The right system doesn't just surface information faster; it structures it around the decisions that matter, so you can act in hours instead of days.`,
+    `In ${industryLabels[a.industry] ?? 'your sector'}, slow decisions rarely mean slow thinking — they mean the intelligence isn't there when it's needed. Your leadership is likely working from fragmented data and delayed reports, making it hard to act with confidence. ORBITAL's structural diagnostic would surface the mechanisms causing decision bottlenecks — so you can address the root cause, not the symptom.`,
   'poor-visibility': (a) =>
-    `Most organisations in ${industryLabels[a.industry] ?? 'your sector'} have more data than they can use — the problem isn't access, it's coherence. When leadership can't see a unified, real-time picture of what's happening, every decision is partially blind. An intelligence layer that consolidates your signals and surfaces what actually needs attention changes the posture from reactive to informed.`,
+    `Most organisations in ${industryLabels[a.industry] ?? 'your sector'} have more data than they can use — the problem isn't access, it's coherence. When leadership can't see a unified, real-time picture of what's actually driving outcomes, every decision is partially blind. ORBITAL exists precisely for this: mapping what is structurally happening, so your leadership can act from genuine understanding.`,
   'risk-exposure': (a) =>
-    `Risk in ${industryLabels[a.industry] ?? 'your sector'} rarely arrives without warning — it builds in signals that go unread. If your organisation is reacting to risks after they crystallise, the gap isn't judgement: it's the absence of a forward-looking intelligence layer. Predictive systems turn historical patterns into early warning — giving you time to act before exposure becomes cost.`,
+    `Risk in ${industryLabels[a.industry] ?? 'your sector'} rarely arrives without warning — it builds in signals that go unread. If your organisation is reacting to risks after they crystallise, the gap isn't judgement: it's the absence of a forensic intelligence layer. MAGNUS finds where risk is being systematically obscured or deferred, while SIMFORE models what happens if those risks materialise.`,
   'inefficient-processes': (a) =>
-    `In ${industryLabels[a.industry] ?? 'your sector'}, manual decision points embedded in operations create compounding inefficiency. Every time a human is required to interpret data and decide on a routine action, you're paying for capacity that an intelligent system could handle in milliseconds. Workflow intelligence doesn't remove human judgement — it reserves it for the decisions that actually need it.`,
+    `In ${industryLabels[a.industry] ?? 'your sector'}, manual decision points embedded in operations create compounding inefficiency. Every time a human is required to interpret data and decide on a routine action, you're paying for capacity that structured intelligence could handle. ORBITAL's lever identification tells you which process changes produce disproportionate efficiency gains.`,
   'growth-constraints': (a) =>
-    `Scaling a ${industryLabels[a.industry] ?? 'growing'} organisation without decision infrastructure means complexity grows faster than capacity. Decisions that worked at one size break down at the next. The organisations that scale well don't just hire more people — they build systems that make better decisions autonomously, so leadership can focus on direction instead of firefighting.`,
+    `Scaling a ${industryLabels[a.industry] ?? 'growing'} organisation without decision infrastructure means complexity grows faster than capacity. Decisions that worked at one size break down at the next. SIMFORE is built for exactly this: modelling how growth scenarios propagate through your operational structure, so leadership can commit to a direction with evidence rather than optimism.`,
   'data-fragmentation': (a) =>
-    `Fragmented data in ${industryLabels[a.industry] ?? 'your organisation'} doesn't just create reporting problems — it creates decision problems. When different teams are working from different numbers, the result isn't just inefficiency: it's misalignment at the leadership level. Unifying your intelligence layer isn't a technical exercise. It's the foundation that makes every other decision improvement possible.`,
+    `Fragmented data in ${industryLabels[a.industry] ?? 'your organisation'} doesn't just create reporting problems — it creates decision problems. When different teams work from different numbers, the result is misalignment at the leadership level. MAGNUS's inconsistency mapping finds where data is contradicting itself, and ORBITAL builds the structural coherence that makes reliable intelligence possible.`,
 }
 
-// ─── Per-product rationale ────────────────────────────────────────────────────
+// ─── Per-system rationale ─────────────────────────────────────────────────────
 
-const productReasonMap: Record<string, (a: AIPlanAnswers) => string> = {
-  'decision-intelligence-engine': (a) =>
-    `Given your challenge with ${challengeLabels[a.challenge]?.toLowerCase() ?? 'decision clarity'}, this system directly addresses the gap between data and actionable intelligence. It's designed to structure complex inputs into decision-ready outputs — the core of what your leadership needs.`,
-  'business-insight-dashboard': (a) =>
-    `With ${priorityLabels[a.priority]?.toLowerCase() ?? 'clarity'} as your priority, a unified intelligence surface removes the noise and puts the right signals in front of the right people. This system consolidates your performance data into one coherent view that actually drives decisions.`,
-  'predictive-analytics-system': (a) =>
-    `Your focus on ${aiHelpLabels[a.aiHelp]?.toLowerCase() ?? 'predicting outcomes'} makes forward-looking analytics the right foundation. This system models future states from your historical patterns — giving your team lead time to act instead of react.`,
-  'ai-workflow-intelligence': (a) =>
-    `For an organisation at ${sizeLabels[a.businessSize]?.toLowerCase() ?? 'your scale'} dealing with ${challengeLabels[a.challenge]?.toLowerCase() ?? 'operational friction'}, embedding decision logic into your workflows removes the bottlenecks that slow everything down. Intelligent routing means fewer manual decisions, not fewer decisions.`,
-  'ai-agent-ecosystem': (a) =>
-    `As your organisation scales, the volume of routine decisions grows with it. An agent ecosystem handles the high-frequency, rule-driven decisions autonomously — freeing your team to focus on the strategic ones. This fits directly with your goal of ${priorityLabels[a.priority]?.toLowerCase() ?? 'growth'}.`,
-  'custom-ai-system-architecture': (a) =>
-    `At enterprise scale in ${industryLabels[a.industry] ?? 'your sector'}, off-the-shelf systems rarely fit the full complexity of your decision landscape. A custom architecture ensures your AI infrastructure is built around your actual data environment and organisational structure — not around a generic template.`,
+const systemReasonMap: Record<SystemId, (a: AIPlanAnswers) => string> = {
+  orbital: (a) =>
+    `Given your challenge with ${challengeLabels[a.challenge]?.toLowerCase() ?? 'decision clarity'}, ORBITAL's diagnostic intelligence is the right starting point. It maps the structural mechanisms behind your outcomes — separating genuine levers from correlated noise — so every subsequent decision is grounded in what is actually driving the business.`,
+  magnus: (a) =>
+    `With ${challengeLabels[a.challenge]?.toLowerCase() ?? 'data inconsistency'} as a friction point, MAGNUS forensic intelligence surfaces where your numbers are contradicting each other and where risk is being understated. It applies the rigour of due diligence analysis to your internal data — from the perspective of an investor who has reason to be sceptical.`,
+  simfore: (a) =>
+    `Your focus on ${aiHelpLabels[a.aiHelp]?.toLowerCase() ?? 'predicting outcomes'} makes SIMFORE the right complement to diagnostic intelligence. Once ORBITAL has mapped your structural mechanics, SIMFORE models what happens if key variables change — so leadership can pressure-test strategic choices before committing to them.`,
 }
 
-// ─── Outcomes ─────────────────────────────────────────────────────────────────
+// ─── Expected outcomes ────────────────────────────────────────────────────────
 
 const outcomeMap: Record<string, string[]> = {
   'better-decisions': [
-    'Leadership decisions backed by structured intelligence — not instinct or incomplete data',
+    'Leadership decisions backed by structural intelligence — not instinct or incomplete data',
     'A measurable reduction in the time it takes to reach confident strategic conclusions',
     'Consistent decision quality across management layers, regardless of who is in the room',
   ],
@@ -129,57 +137,59 @@ const outcomeMap: Record<string, string[]> = {
     'Scenario planning grounded in data, giving leadership options rather than surprises',
   ],
   'automate-workflows': [
-    'High-volume, routine decisions handled automatically — without manual intervention',
-    'Operational throughput increases without adding headcount or complexity',
-    'Leadership capacity freed for strategic work, not process management',
+    'Structural bottlenecks identified and ranked by operational impact',
+    'Leadership capacity freed from process management for strategic work',
+    'Decision logic embedded where it belongs — in the workflow, not in a meeting',
   ],
   'understand-customers': [
-    'A clear model of customer behaviour, segments, and signals — updated continuously',
-    'Early identification of churn risk, so you can act before a customer is already gone',
-    'Personalised customer intelligence that scales without proportional manual effort',
+    'A structural model of what actually drives customer behaviour in your market',
+    'Early identification of churn signals, retention levers, and acquisition patterns',
+    'Strategic moves grounded in customer mechanics, not surface-level metrics',
   ],
   'reduce-risk': [
-    'Early warning systems that surface financial, operational, and compliance risk before it peaks',
+    'Early warning systems that surface financial, operational, and structural risk before it peaks',
     'Risk decisions made with analytical confidence rather than reactive judgement',
-    'A measurable reduction in exposure to foreseeable, preventable events',
+    'A forensic-grade view of where your exposure is being understated or obscured',
   ],
   'unified-intelligence': [
-    'A single source of truth for performance — one set of numbers, one coherent view',
-    'Leadership aligned on the same intelligence picture, eliminating conflicting interpretations',
-    'Faster consensus in meetings because data is no longer the obstacle',
+    'A single structural picture of performance — one coherent view your leadership actually trusts',
+    'Leadership aligned on the same intelligence, eliminating conflicting interpretations',
+    'Faster consensus because data is no longer the obstacle in strategic conversations',
   ],
 }
 
-// ─── Core logic ───────────────────────────────────────────────────────────────
+// ─── Core scoring ─────────────────────────────────────────────────────────────
 
-function rankProducts(answers: AIPlanAnswers): string[] {
-  const scores: Record<string, number> = {}
+function rankSystems(answers: AIPlanAnswers): SystemId[] {
+  const scores: Partial<Record<SystemId, number>> = {}
 
-  const baseProducts = productMap[answers.aiHelp] ?? ['decision-intelligence-engine', 'business-insight-dashboard']
-  baseProducts.forEach((p, i) => { scores[p] = (scores[p] ?? 0) + (3 - i) })
+  const baseSystems = systemMapByAiHelp[answers.aiHelp] ?? (['orbital', 'simfore'] as SystemId[])
+  baseSystems.forEach((s, i) => { scores[s] = (scores[s] ?? 0) + (3 - i) })
 
-  const challengeBoost = challengeProductBoosts[answers.challenge]
+  const challengeBoost = challengeSystemBoosts[answers.challenge]
   if (challengeBoost) scores[challengeBoost] = (scores[challengeBoost] ?? 0) + 2
 
-  const priorityBoost = priorityProductBoosts[answers.priority]
+  const priorityBoost = prioritySystemBoosts[answers.priority]
   if (priorityBoost) scores[priorityBoost] = (scores[priorityBoost] ?? 0) + 2
 
-  const sizeBoost = sizeProductBoosts[answers.businessSize]
+  const sizeBoost = sizeSystemBoosts[answers.businessSize]
   if (sizeBoost) scores[sizeBoost] = (scores[sizeBoost] ?? 0) + 1
 
   return Object.entries(scores)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 3)
-    .map(([id]) => id)
+    .map(([id]) => id as SystemId)
 }
 
+// ─── Main export ──────────────────────────────────────────────────────────────
+
 export function generateAIPlan(answers: AIPlanAnswers): AIPlanResult {
-  const recommendedProducts = rankProducts(answers)
+  const recommendedSystems = rankSystems(answers)
 
   const summaryFn = summaryMap[answers.challenge]
   const summary = summaryFn
     ? summaryFn(answers)
-    : `Based on your inputs, there is a clear opportunity to embed decision intelligence into ${industryLabels[answers.industry] ?? 'your organisation'} — turning the data you already have into the clarity your leadership needs to act faster and with greater confidence.`
+    : `Based on your inputs, there is a clear opportunity to embed decision intelligence into ${industryLabels[answers.industry] ?? 'your organisation'} — turning the data you already have into the structural clarity your leadership needs to act faster and with greater confidence.`
 
   const outcomes = outcomeMap[answers.aiHelp] ?? [
     'Faster, more confident decisions across the organisation',
@@ -187,10 +197,10 @@ export function generateAIPlan(answers: AIPlanAnswers): AIPlanResult {
     'Measurable improvement in the metrics that matter most to your leadership',
   ]
 
-  const productReasons: Record<string, string> = {}
-  for (const id of recommendedProducts) {
-    const fn = productReasonMap[id]
-    if (fn) productReasons[id] = fn(answers)
+  const systemReasons: Record<string, string> = {}
+  for (const id of recommendedSystems) {
+    const fn = systemReasonMap[id]
+    if (fn) systemReasons[id] = fn(answers)
   }
 
   const businessContext: BusinessContextItem[] = [
@@ -201,41 +211,32 @@ export function generateAIPlan(answers: AIPlanAnswers): AIPlanResult {
     { label: 'Priority outcome', value: priorityLabels[answers.priority] ?? answers.priority },
   ]
 
-  const relevantIndustries = [answers.industry]
-  if (answers.industry !== 'general-business') relevantIndustries.push('general-business')
+  const relevantDomains: ApplicationDomainId[] = industryDomainMap[answers.industry] ?? ['financial']
 
   const suggestedPages = [
     {
-      label: 'Explore Recommended Systems',
-      path: '/products',
+      label: 'Intelligence Systems',
+      path: '/intelligence-systems',
       reason: 'See full capability details for each system we\'ve recommended',
     },
     {
-      label: 'Your Sector',
-      path: `/industries#${answers.industry}`,
-      reason: `How we\'ve applied these systems in ${industryLabels[answers.industry] ?? 'your sector'}`,
+      label: 'Applications',
+      path: '/applications',
+      reason: 'Explore deployed applications relevant to your sector',
     },
     {
-      label: 'How We Build',
-      path: '/technology',
-      reason: 'The architecture and principles behind every system we deploy',
+      label: 'Book a Call',
+      path: '/contact',
+      reason: 'Validate this plan in a 30-minute strategy conversation',
     },
   ]
-
-  if (answers.businessSize === 'enterprise') {
-    suggestedPages.push({
-      label: 'Custom Architecture',
-      path: '/products#custom-ai-system-architecture',
-      reason: 'Enterprise deployments often require a tailored infrastructure approach',
-    })
-  }
 
   return {
     summary,
     businessContext,
-    recommendedProducts,
-    productReasons,
-    relevantIndustries,
+    recommendedSystems,
+    systemReasons,
+    relevantDomains,
     expectedOutcomes: outcomes,
     suggestedPages,
   }
