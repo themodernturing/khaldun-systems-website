@@ -95,10 +95,11 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #60a5fa 100%);
+  background: linear-gradient(120deg, #93c5fd 0%, #818cf8 40%, #c084fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  background-size: 200% auto;
 }
 
 .gradient-text-purple {
@@ -111,10 +112,15 @@ body {
 .btn-primary {
   background: linear-gradient(135deg, #1d4ed8 0%, #6d28d9 100%);
   color: white;
-  border: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 0 0 rgba(59,130,246,0), 0 1px 3px rgba(0,0,0,0.4);
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 20px rgba(59,130,246,0.25), 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .btn-primary::before {

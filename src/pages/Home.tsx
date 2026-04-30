@@ -79,74 +79,88 @@ export function Home() {
   return (
     <>
       {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center hero-gradient grid-bg overflow-hidden">
-        {/* Ambient glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-1/4 w-[400px] h-[300px] bg-purple-600/8 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: 'radial-gradient(ellipse 90% 60% at 50% -10%, rgba(29,78,216,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 75% 30%, rgba(109,40,217,0.18) 0%, transparent 60%), #020817' }}>
+        {/* Grid overlay */}
+        <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
 
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-24">
+        {/* Layered ambient glows */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-700/12 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/3 w-[400px] h-[350px] bg-purple-700/10 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[250px] bg-cyan-700/8 rounded-full blur-[70px] pointer-events-none" />
+
+        {/* Thin top highlight line */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
+
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
+          {/* Eyebrow badge */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
           >
-            <span className="inline-block text-blue-400 text-sm font-semibold tracking-widest uppercase mb-6 px-3 py-1 rounded-full border border-blue-500/20 bg-blue-500/5">
+            <span className="inline-flex items-center gap-2 text-blue-300 text-xs font-semibold tracking-[0.2em] uppercase mb-8 px-4 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
               Decision Intelligence Systems
             </span>
           </motion.div>
 
+          {/* Heading */}
           <motion.h1
-            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6"
-            initial={{ opacity: 0, y: 30 }}
+            className="text-5xl sm:text-6xl lg:text-[4.5rem] font-extrabold text-white leading-[1.08] tracking-tight mb-6"
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.65, delay: 0.15 }}
           >
-            Your data should{' '}
-            <span className="gradient-text">drive decisions,</span>
-            <br />
-            not just reports.
+            Build Intelligence.{' '}
+            <br className="hidden sm:block" />
+            <span className="gradient-text">Not Just Automation.</span>
           </motion.h1>
 
+          {/* Subheading */}
           <motion.p
-            className="text-xl text-slate-400 leading-relaxed mb-10 max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-lg sm:text-xl text-slate-400 leading-relaxed mb-12 max-w-xl mx-auto font-normal"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
+            transition={{ duration: 0.6, delay: 0.28 }}
           >
-            Khaldun Systems builds AI systems that analyze business data, simulate outcomes, and guide better decisions — turning intelligence from a concept into your operational foundation.
+            AI systems that analyze data, simulate outcomes, and guide better decisions.
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 20 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.55, delay: 0.4 }}
           >
             <Button to="/ai-plan" size="lg">
-              Get Your AI Plan <ArrowRight size={18} />
+              Get Your AI Plan <ArrowRight size={16} />
             </Button>
             <Button to="/products" variant="ghost" size="lg">
               Explore Systems
             </Button>
           </motion.div>
 
-          {/* Stat strip */}
+          {/* Divider + stat strip */}
           <motion.div
-            className="mt-20 grid grid-cols-3 gap-6 max-w-lg mx-auto"
+            className="mt-24"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
+            transition={{ duration: 0.8, delay: 0.65 }}
           >
-            {[
-              { value: '6', label: 'Decision Systems' },
-              { value: '6', label: 'Industries Served' },
-              { value: '1', label: 'Purpose: Better Decisions' },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-2xl font-bold text-white">{stat.value}</div>
-                <div className="text-xs text-slate-500 mt-1">{stat.label}</div>
-              </div>
-            ))}
+            <div className="w-px h-10 bg-gradient-to-b from-transparent to-blue-500/30 mx-auto mb-8" />
+            <div className="grid grid-cols-3 gap-8 max-w-md mx-auto">
+              {[
+                { value: '6', label: 'Decision Systems' },
+                { value: '6', label: 'Industries' },
+                { value: '1', label: 'Core Purpose' },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-xs text-slate-500 tracking-wide">{stat.label}</div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
