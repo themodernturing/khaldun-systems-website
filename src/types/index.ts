@@ -29,10 +29,17 @@ export interface AIPlanAnswers {
 
 export interface AIPlanResult {
   summary: string
+  businessContext: BusinessContextItem[]
   recommendedProducts: string[]
+  productReasons: Record<string, string>
   relevantIndustries: string[]
   expectedOutcomes: string[]
   suggestedPages: SuggestedPage[]
+}
+
+export interface BusinessContextItem {
+  label: string
+  value: string
 }
 
 export interface SuggestedPage {
@@ -43,8 +50,9 @@ export interface SuggestedPage {
 
 export interface AIPlanQuestion {
   id: keyof AIPlanAnswers
+  stepContext: string
   question: string
-  subtitle: string
+  why: string
   options: AIPlanOption[]
 }
 
@@ -52,7 +60,6 @@ export interface AIPlanOption {
   value: string
   label: string
   description?: string
-  icon?: string
 }
 
 export interface EcosystemNode {
