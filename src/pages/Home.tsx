@@ -1,349 +1,398 @@
-import { motion } from 'framer-motion'
-import { ArrowRight, Brain, TrendingUp, Zap, BarChart3, Network, Shield } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Brain, Shield, Zap, TrendingUp, ArrowRight, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
 import { CTABanner } from '@/components/sections/CTABanner'
-import { SectionHeader } from '@/components/sections/SectionHeader'
+import type { AIPlanAnswers } from '@/types'
 
-const coreCapabilities = [
+// ─── Entry options — map to aiHelp values ──────────────────────────────────
+
+const entryOptions: {
+  icon: React.FC<{ size?: number; className?: string }>
+  label: string
+  detail: string
+  value: AIPlanAnswers['aiHelp']
+  accent: string
+  glow: string
+}[] = [
   {
     icon: Brain,
-    title: 'Decision Intelligence',
-    description: 'Systems that turn data into decision-ready intelligence — not just dashboards.',
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Predictive Analytics',
-    description: 'Forward-looking models that give leadership time to act, not react.',
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/10',
-  },
-  {
-    icon: Zap,
-    title: 'Workflow Intelligence',
-    description: 'Decision logic embedded directly into operational processes.',
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-500/10',
-  },
-  {
-    icon: BarChart3,
-    title: 'Insight Infrastructure',
-    description: 'Unified intelligence surfaces that replace scattered reports.',
-    color: 'text-indigo-400',
-    bg: 'bg-indigo-500/10',
-  },
-  {
-    icon: Network,
-    title: 'AI Agent Ecosystems',
-    description: 'Coordinated networks of agents that execute with strategic oversight.',
-    color: 'text-blue-400',
-    bg: 'bg-blue-500/10',
+    label: 'Decision quality',
+    detail: 'Better decisions from the data you already have',
+    value: 'better-decisions',
+    accent: 'text-blue-400',
+    glow: 'rgba(59,130,246,0.12)',
   },
   {
     icon: Shield,
-    title: 'Risk Intelligence',
-    description: 'Proactive risk modeling that surfaces threats before they crystallize.',
-    color: 'text-purple-400',
-    bg: 'bg-purple-500/10',
+    label: 'Risk visibility',
+    detail: 'Surface exposure before it becomes cost',
+    value: 'reduce-risk',
+    accent: 'text-purple-400',
+    glow: 'rgba(139,92,246,0.12)',
+  },
+  {
+    icon: Zap,
+    label: 'Operational speed',
+    detail: 'Remove the friction slowing your critical processes',
+    value: 'automate-workflows',
+    accent: 'text-cyan-400',
+    glow: 'rgba(6,182,212,0.10)',
+  },
+  {
+    icon: TrendingUp,
+    label: 'Forecasting',
+    detail: 'See what\'s coming before it arrives',
+    value: 'predict-outcomes',
+    accent: 'text-indigo-400',
+    glow: 'rgba(99,102,241,0.12)',
   },
 ]
 
-const differentiators = [
-  {
-    label: 'Automation',
-    replacement: 'Intelligence',
-    description: 'We don\'t just automate tasks. We build systems that make better decisions about which tasks matter.',
-  },
-  {
-    label: 'Tools',
-    replacement: 'Systems',
-    description: 'Isolated tools create isolated data. We build connected systems that reason across your entire operation.',
-  },
-  {
-    label: 'Services',
-    replacement: 'Infrastructure',
-    description: 'We don\'t deliver projects. We build decision infrastructure that compounds in value over time.',
-  },
+// ─── Intelligence loop steps ────────────────────────────────────────────────
+
+const loopSteps = [
+  { label: 'Data', sub: 'Your signals, unified' },
+  { label: 'Intelligence', sub: 'Patterns, not noise' },
+  { label: 'Simulation', sub: 'Outcomes modelled' },
+  { label: 'Decision', sub: 'Clarity, not guesswork' },
+  { label: 'Outcome', sub: 'Results that compound' },
 ]
 
-const fadeUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
-}
+// ─── Component ──────────────────────────────────────────────────────────────
+
+type EntryState = 'idle' | 'thinking' | 'launching'
 
 export function Home() {
+  const navigate = useNavigate()
+  const [entryState, setEntryState] = useState<EntryState>('idle')
+  const [selected, setSelected] = useState<string | null>(null)
+  const [hoveredLoop, setHoveredLoop] = useState<number | null>(null)
+
+  function handleSelect(value: string) {
+    if (entryState !== 'idle') return
+    setSelected(value)
+    setEntryState('thinking')
+    setTimeout(() => setEntryState('launching'), 300)
+    setTimeout(() => {
+      navigate('/ai-plan', { state: { preselected: { aiHelp: value } } })
+    }, 900)
+  }
+
   return (
     <>
-      {/* Hero */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden" style={{ background: 'radial-gradient(ellipse 90% 60% at 50% -10%, rgba(29,78,216,0.30) 0%, transparent 65%), radial-gradient(ellipse 60% 50% at 75% 30%, rgba(109,40,217,0.18) 0%, transparent 60%), #020817' }}>
-        {/* Grid overlay */}
-        <div className="absolute inset-0 grid-bg opacity-40 pointer-events-none" />
+      {/* ── HERO ─────────────────────────────────────────────────────── */}
+      <section
+        className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+        style={{
+          background:
+            'radial-gradient(ellipse 100% 65% at 50% -5%, rgba(29,78,216,0.28) 0%, transparent 65%), radial-gradient(ellipse 50% 40% at 80% 30%, rgba(109,40,217,0.14) 0%, transparent 55%), #020817',
+        }}
+      >
+        <div className="absolute inset-0 grid-bg opacity-35 pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-px bg-gradient-to-r from-transparent via-blue-500/35 to-transparent pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-blue-700/8 rounded-full blur-[120px] pointer-events-none" />
 
-        {/* Layered ambient glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-blue-700/12 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute top-1/2 left-1/3 w-[400px] h-[350px] bg-purple-700/10 rounded-full blur-[80px] pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[250px] bg-cyan-700/8 rounded-full blur-[70px] pointer-events-none" />
+        <div className="relative w-full max-w-3xl mx-auto px-4 sm:px-6 py-28 flex flex-col items-center text-center">
 
-        {/* Thin top highlight line */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-blue-500/40 to-transparent" />
-
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-32">
-          {/* Eyebrow badge */}
+          {/* Badge */}
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            transition={{ duration: 0.45 }}
           >
-            <span className="inline-flex items-center gap-2 text-blue-300 text-xs font-semibold tracking-[0.2em] uppercase mb-8 px-4 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 text-blue-300 text-[11px] font-semibold tracking-[0.22em] uppercase mb-7 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/6">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-              Decision Intelligence Systems
+              Decision Intelligence Platform
             </span>
           </motion.div>
 
           {/* Heading */}
           <motion.h1
-            className="text-5xl sm:text-6xl lg:text-[4.5rem] font-extrabold text-white leading-[1.08] tracking-tight mb-6"
-            initial={{ opacity: 0, y: 24 }}
+            className="text-4xl sm:text-5xl lg:text-[3.6rem] font-extrabold text-white leading-[1.1] tracking-tight mb-4"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.15 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
           >
-            Build Intelligence.{' '}
-            <br className="hidden sm:block" />
-            <span className="gradient-text">Not Just Automation.</span>
+            Your data exists.
+            <br />
+            <span className="gradient-text">Your decisions should reflect it.</span>
           </motion.h1>
 
-          {/* Subheading */}
+          {/* Subline */}
           <motion.p
-            className="text-lg sm:text-xl text-slate-400 leading-relaxed mb-12 max-w-xl mx-auto font-normal"
-            initial={{ opacity: 0, y: 16 }}
+            className="text-slate-400 text-base sm:text-lg mb-10 max-w-lg leading-relaxed"
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.28 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
-            AI systems that analyze data, simulate outcomes, and guide better decisions.
+            We build AI systems that analyze your business, simulate outcomes, and guide better decisions — not dashboards, not tools. Systems.
           </motion.p>
 
-          {/* CTAs */}
+          {/* ── Interactive entry widget ────────────────────────────── */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            initial={{ opacity: 0, y: 16 }}
+            className="w-full"
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.4 }}
+            transition={{ duration: 0.55, delay: 0.3 }}
           >
-            <Button to="/ai-plan" size="lg">
-              Get Your AI Plan <ArrowRight size={16} />
-            </Button>
-            <Button to="/products" variant="ghost" size="lg">
-              Explore Systems
-            </Button>
-          </motion.div>
+            <p className="text-slate-400 text-sm font-medium mb-4 tracking-wide">
+              What's the most important thing to improve right now?
+            </p>
 
-          {/* Divider + stat strip */}
-          <motion.div
-            className="mt-24"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.65 }}
-          >
-            <div className="w-px h-10 bg-gradient-to-b from-transparent to-blue-500/30 mx-auto mb-8" />
-            <div className="grid grid-cols-3 gap-8 max-w-md mx-auto">
-              {[
-                { value: '6', label: 'Decision Systems' },
-                { value: '6', label: 'Industries' },
-                { value: '1', label: 'Core Purpose' },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-xs text-slate-500 tracking-wide">{stat.label}</div>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              {entryOptions.map((opt) => {
+                const isSelected = selected === opt.value
+                const isOther = selected !== null && selected !== opt.value
+                const isThinking = isSelected && entryState === 'thinking'
+                const isLaunching = isSelected && entryState === 'launching'
+
+                return (
+                  <motion.button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleSelect(opt.value)}
+                    disabled={entryState !== 'idle' && !isSelected}
+                    className={`relative text-left p-4 rounded-xl border transition-all duration-300 cursor-pointer group overflow-hidden ${
+                      isSelected
+                        ? 'border-blue-400/60 bg-blue-500/10'
+                        : isOther
+                        ? 'border-white/[0.04] bg-white/[0.01] opacity-40'
+                        : 'border-white/[0.07] bg-white/[0.02] hover:border-white/[0.15] hover:bg-white/[0.04]'
+                    }`}
+                    style={isSelected ? { boxShadow: `0 0 32px ${opt.glow}` } : {}}
+                    whileTap={entryState === 'idle' ? { scale: 0.98 } : {}}
+                  >
+                    {/* Glow sweep on launch */}
+                    {isLaunching && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                        initial={{ x: '-100%' }}
+                        animate={{ x: '100%' }}
+                        transition={{ duration: 0.5 }}
+                      />
+                    )}
+
+                    <div className="flex items-start gap-3">
+                      <div className={`flex-shrink-0 mt-0.5 transition-all duration-300 ${isSelected ? opt.accent : 'text-slate-500 group-hover:text-slate-400'}`}>
+                        {isThinking || isLaunching ? (
+                          <Loader2 size={18} className="animate-spin text-blue-400" />
+                        ) : (
+                          <opt.icon size={18} />
+                        )}
+                      </div>
+                      <div>
+                        <div className={`font-semibold text-sm mb-0.5 transition-colors ${isSelected ? 'text-white' : 'text-slate-300 group-hover:text-white'}`}>
+                          {opt.label}
+                        </div>
+                        <div className="text-slate-500 text-xs leading-relaxed">{opt.detail}</div>
+                      </div>
+                    </div>
+
+                    {isLaunching && (
+                      <motion.div
+                        className="absolute bottom-0 left-0 h-px bg-gradient-to-r from-blue-500 to-purple-500"
+                        initial={{ width: '0%' }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 0.7 }}
+                      />
+                    )}
+                  </motion.button>
+                )
+              })}
             </div>
+
+            <AnimatePresence>
+              {entryState !== 'idle' && (
+                <motion.p
+                  className="text-blue-400 text-xs text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {entryState === 'thinking' ? 'Preparing your consultation…' : 'Starting your AI Plan →'}
+                </motion.p>
+              )}
+              {entryState === 'idle' && (
+                <motion.p
+                  className="text-slate-600 text-xs text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  Select one to begin · or{' '}
+                  <button
+                    type="button"
+                    className="text-blue-500 hover:text-blue-400 transition-colors underline underline-offset-2"
+                    onClick={() => navigate('/ai-plan')}
+                  >
+                    start the full AI Plan
+                  </button>
+                </motion.p>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       </section>
 
-      {/* The Shift */}
+      {/* ── INTELLIGENCE LOOP ─────────────────────────────────────────── */}
       <section className="py-24 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="The Distinction"
-            title="This isn't AI automation."
-            titleHighlight="It's decision infrastructure."
-            description="Most AI implementations optimize tasks. We build systems that improve the quality of decisions that drive those tasks."
-          />
+        <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-14"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-blue-400 text-xs font-semibold tracking-widest uppercase mb-3 block">
+              How it works
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">
+              From raw signal to confident decision.
+            </h2>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {differentiators.map((item, i) => (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <Card glow className="h-full">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-slate-500 text-sm line-through">{item.label}</span>
-                    <ArrowRight size={14} className="text-blue-400" />
-                    <span className="text-blue-300 font-semibold text-sm">{item.replacement}</span>
-                  </div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{item.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+          <div className="relative flex flex-col lg:flex-row items-stretch gap-1">
+            {/* Connector line — desktop */}
+            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-px -translate-y-1/2 z-0"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.2) 20%, rgba(139,92,246,0.2) 80%, transparent)' }}
+            />
 
-      {/* Core Capabilities */}
-      <section className="py-24 relative">
-        <div className="absolute inset-0 grid-bg opacity-30" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="What We Build"
-            title="Six systems."
-            titleHighlight="One purpose."
-            description="Each system is a layer in your decision intelligence infrastructure — designed to work alone or as part of a connected ecosystem."
-          />
+            {loopSteps.map((s, i) => {
+              const isHovered = hoveredLoop === i
+              const progress = (i / (loopSteps.length - 1))
+              const r = Math.round(59 + (139 - 59) * progress)
+              const g = Math.round(130 + (92 - 130) * progress)
+              const b = Math.round(246 + (246 - 246) * progress)
+              const color = `rgb(${r},${g},${b})`
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {coreCapabilities.map((cap, i) => (
-              <motion.div
-                key={cap.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-              >
-                <Card hover className="h-full">
-                  <div className={`w-10 h-10 rounded-lg ${cap.bg} flex items-center justify-center mb-4`}>
-                    <cap.icon size={20} className={cap.color} />
-                  </div>
-                  <h3 className="text-white font-semibold mb-2">{cap.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{cap.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="text-center mt-10">
-            <Button to="/products" variant="ghost" size="md">
-              See All Systems <ArrowRight size={14} />
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* How it Works */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="The Intelligence Loop"
-            title="From raw data to"
-            titleHighlight="confident decisions"
-            description="Our systems don't sit next to your operations — they're woven into the decision layer that drives them."
-          />
-
-          <div className="relative">
-            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent -translate-y-1/2 z-0" />
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 relative">
-              {['Data', 'Intelligence', 'Simulation', 'Decisions', 'Outcomes'].map((step, i) => (
+              return (
                 <motion.div
-                  key={step}
-                  className="relative"
-                  initial={{ opacity: 0, y: 20 }}
+                  key={s.label}
+                  className="relative flex-1 z-10"
+                  initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: i * 0.12 }}
+                  transition={{ duration: 0.4, delay: i * 0.09 }}
+                  onHoverStart={() => setHoveredLoop(i)}
+                  onHoverEnd={() => setHoveredLoop(null)}
                 >
-                  <div className="glass-card rounded-xl p-5 text-center relative z-10">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center mx-auto mb-3 text-white text-sm font-bold">
+                  <div
+                    className="glass-card rounded-xl p-5 text-center cursor-default transition-all duration-300 h-full"
+                    style={isHovered ? { borderColor: `${color}50`, boxShadow: `0 0 20px ${color}18` } : {}}
+                  >
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-3 text-white text-xs font-bold transition-all duration-300"
+                      style={{ background: `linear-gradient(135deg, ${color}cc, ${color}66)` }}
+                    >
                       {i + 1}
                     </div>
-                    <div className="text-white font-semibold text-sm">{step}</div>
+                    <div className="text-white font-semibold text-sm mb-1">{s.label}</div>
+                    <div className="text-slate-500 text-xs">{s.sub}</div>
                   </div>
-                  {i < 4 && (
-                    <div className="hidden lg:flex items-center justify-end absolute -right-3 top-1/2 -translate-y-1/2 z-20">
-                      <ArrowRight size={16} className="text-blue-400" />
+
+                  {i < loopSteps.length - 1 && (
+                    <div className="hidden lg:flex absolute -right-0.5 top-1/2 -translate-y-1/2 z-20 translate-x-1/2">
+                      <ArrowRight size={13} className="text-slate-600" />
                     </div>
                   )}
                 </motion.div>
-              ))}
-            </div>
+              )
+            })}
           </div>
 
-          <div className="text-center mt-12">
-            <Link
-              to="/ecosystem"
-              className="inline-flex items-center gap-2 text-blue-400 text-sm font-medium hover:text-blue-300 transition-colors"
-            >
-              Explore the full ecosystem <ArrowRight size={14} />
-            </Link>
-          </div>
+          <motion.div
+            className="text-center mt-10"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+          >
+            <Button to="/ecosystem" variant="ghost" size="sm">
+              See how the ecosystem connects <ArrowRight size={13} />
+            </Button>
+          </motion.div>
         </div>
       </section>
 
-      {/* Industries */}
-      <section className="py-24 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-900/5 to-transparent" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="Industries"
-            title="Built for the sectors where"
-            titleHighlight="decisions have consequences"
-          />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* ── WHAT WE BUILD ─────────────────────────────────────────────── */}
+      <section className="py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <motion.div
+            className="text-center mb-12"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+              This is not AI automation.
+            </h2>
+            <p className="text-slate-400 text-base max-w-xl mx-auto">
+              Most AI companies give you tools. We build decision infrastructure — systems that compound in value because they're woven into how your organisation thinks, not bolted on top.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-white/[0.04] rounded-2xl overflow-hidden border border-white/[0.05]">
             {[
-              { name: 'Education', emoji: '🎓' },
-              { name: 'Healthcare', emoji: '⚕️' },
-              { name: 'Finance', emoji: '📊' },
-              { name: 'Retail', emoji: '🛍️' },
-              { name: 'Government', emoji: '🏛️' },
-              { name: 'Business', emoji: '🏢' },
-            ].map((ind, i) => (
+              {
+                from: 'Automation',
+                to: 'Intelligence',
+                body: 'We don\'t just automate tasks — we build systems that decide which tasks matter.',
+              },
+              {
+                from: 'Tools',
+                to: 'Systems',
+                body: 'Tools create data silos. Systems reason across everything your organisation knows.',
+              },
+              {
+                from: 'Information',
+                to: 'Decisions',
+                body: 'More reports don\'t improve decisions. Intelligence infrastructure does.',
+              },
+            ].map((item, i) => (
               <motion.div
-                key={ind.name}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                key={item.to}
+                className="bg-[#020817] p-8 group"
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.07 }}
+                transition={{ duration: 0.45, delay: i * 0.1 }}
               >
-                <Link to="/industries" className="block">
-                  <Card hover className="text-center py-6">
-                    <div className="text-2xl mb-2">{ind.emoji}</div>
-                    <div className="text-slate-300 text-sm font-medium">{ind.name}</div>
-                  </Card>
-                </Link>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-slate-600 text-xs line-through">{item.from}</span>
+                  <ArrowRight size={12} className="text-blue-500" />
+                  <span className="text-blue-400 text-xs font-semibold">{item.to}</span>
+                </div>
+                <p className="text-slate-400 text-sm leading-relaxed">{item.body}</p>
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            className="text-center mt-10"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            <Button to="/products" variant="ghost" size="sm">
+              Explore our six decision systems <ArrowRight size={13} />
+            </Button>
+          </motion.div>
         </div>
       </section>
 
-      {/* Founders teaser */}
-      <motion.section
-        className="py-24"
-        {...fadeUp}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="inline-block text-purple-400 text-sm font-semibold tracking-widest uppercase mb-4">
-            The Founding Perspective
-          </span>
-          <blockquote className="text-2xl sm:text-3xl font-medium text-white leading-relaxed mb-8">
-            "Finance-driven decision thinking, combined with technology-driven system architecture. Two perspectives. One purpose."
-          </blockquote>
-          <Button to="/about" variant="ghost">
-            Meet the Founders <ArrowRight size={14} />
-          </Button>
-        </div>
-      </motion.section>
-
-      <CTABanner />
+      {/* ── BOTTOM CTA ────────────────────────────────────────────────── */}
+      <CTABanner
+        title="Find out exactly where AI can improve your decisions."
+        description="Five questions. Under three minutes. A report built around your business."
+        primaryLabel="Start Your AI Plan"
+        primaryTo="/ai-plan"
+        secondaryLabel="Book a Strategy Call"
+        secondaryTo="/contact"
+      />
     </>
   )
 }

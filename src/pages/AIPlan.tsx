@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { StepIndicator } from '@/components/ai-plan/StepIndicator'
 import { QuestionStep } from '@/components/ai-plan/QuestionStep'
@@ -16,33 +16,54 @@ const defaultAnswers: AIPlanAnswers = {
   priority: '',
 }
 
+// Label shown when a step is pre-filled from homepage selection
+const prefilledLabels: Partial<Record<AIPlanAnswers['aiHelp'], string>> = {
+  'better-decisions': 'Decision quality',
+  'reduce-risk': 'Risk visibility',
+  'automate-workflows': 'Operational speed',
+  'predict-outcomes': 'Forecasting',
+}
+
 export function AIPlan() {
-  const [step, setStep] = useState(0)
-  const [answers, setAnswers] = useState<AIPlanAnswers>(defaultAnswers)
-  const [direction, setDirection] = useState(1)
-  const [autoAdvancing, setAutoAdvancing] = useState(false)
+  const location = useLocation()
   const navigate = useNavigate()
+
+  // Merge any preselected values from homepage
+  const preselected = (location.state as { preselected?: Partial<AIPlanAnswers> } | null)?.preselected ?? {}
+  const initialAnswers: AIPlanAnswers = { ...defaultAnswers, ...preselected }
+
+  const [step, setStep] = useState(0)
+  const [answers, setAnswers] = useState<AIPlanAnswers>(initialAnswers)
+  const [direction, setDirection] = useState(1)
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const currentQuestion = aiPlanQuestions[step]
   const currentAnswer = answers[currentQuestion.id]
   const totalSteps = aiPlanQuestions.length
   const isLast = step === totalSteps - 1
+  const wasPreselected = currentQuestion.id === 'aiHelp' && Boolean(preselected.aiHelp)
 
-  // Auto-advance 600ms after a selection is made
+  // Auto-advance when current step has an answer
   useEffect(() => {
-    if (!currentAnswer || autoAdvancing) return
-    setAutoAdvancing(true)
-    const timer = setTimeout(() => {
+    if (!currentAnswer) return
+    if (advanceTimer.current) clearTimeout(advanceTimer.current)
+
+    // Faster advance for pre-filled steps
+    const delay = wasPreselected ? 300 : 540
+
+    advanceTimer.current = setTimeout(() => {
       if (isLast) {
         navigate('/ai-plan/results', { state: { answers } })
       } else {
         setDirection(1)
         setStep((s) => s + 1)
       }
-      setAutoAdvancing(false)
-    }, 520)
-    return () => clearTimeout(timer)
-  }, [currentAnswer]) // eslint-disable-line react-hooks/exhaustive-deps
+    }, delay)
+
+    return () => {
+      if (advanceTimer.current) clearTimeout(advanceTimer.current)
+    }
+  }, [currentAnswer, step]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleAnswer(key: keyof AIPlanAnswers, value: string) {
     setAnswers((prev) => ({ ...prev, [key]: value }))
@@ -50,7 +71,7 @@ export function AIPlan() {
 
   function handleBack() {
     if (step === 0) return
-    setAutoAdvancing(false)
+    if (advanceTimer.current) clearTimeout(advanceTimer.current)
     setDirection(-1)
     setStep((s) => s - 1)
   }
@@ -60,11 +81,11 @@ export function AIPlan() {
       className="min-h-screen flex flex-col"
       style={{
         background:
-          'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(29,78,216,0.22) 0%, transparent 65%), #020817',
+          'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(29,78,216,0.20) 0%, transparent 65%), #020817',
       }}
     >
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 sm:px-8 py-5 border-b border-white/[0.05]">
+      <div className="flex items-center justify-between px-4 sm:px-8 py-5 border-b border-white/[0.04]">
         <Link
           to="/"
           className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm"
@@ -75,33 +96,53 @@ export function AIPlan() {
           </div>
           <span className="font-medium hidden sm:inline">Khaldun Systems</span>
         </Link>
-        <span className="text-slate-600 text-xs">Your AI Plan — Confidential</span>
+        <span className="text-slate-600 text-xs tracking-wide">AI Plan · Confidential</span>
       </div>
 
-      {/* Main content */}
+      {/* Content */}
       <div className="flex-1 flex flex-col justify-center">
         <div className="max-w-2xl w-full mx-auto px-4 sm:px-6 py-12">
-          {/* Intro copy — only on step 0 */}
-          {step === 0 && (
-            <motion.div
-              className="mb-10 text-center"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <span className="inline-block text-blue-400 text-xs font-semibold tracking-widest uppercase mb-3">
-                AI Plan — 5 Questions
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                Let's understand your business first.
-              </h1>
-              <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
-                This isn't a form — it's a structured consultation. Each question is designed to help us build a recommendation that actually fits your situation.
-              </p>
-            </motion.div>
-          )}
 
-          {/* Progress indicator */}
+          {/* Step 0 intro */}
+          <AnimatePresence>
+            {step === 0 && (
+              <motion.div
+                className="mb-10 text-center"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+              >
+                {preselected.aiHelp && prefilledLabels[preselected.aiHelp] ? (
+                  <>
+                    <span className="inline-block text-green-400 text-xs font-semibold tracking-widest uppercase mb-3">
+                      You want to improve: {prefilledLabels[preselected.aiHelp]}
+                    </span>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                      Now let's understand your context.
+                    </h1>
+                    <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
+                      A few more questions and we'll build a plan specific to your organisation.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <span className="inline-block text-blue-400 text-xs font-semibold tracking-widest uppercase mb-3">
+                      AI Plan · 5 questions
+                    </span>
+                    <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                      Let's understand your business first.
+                    </h1>
+                    <p className="text-slate-400 text-sm max-w-md mx-auto leading-relaxed">
+                      This is a structured consultation — not a form. Each question builds toward a recommendation that actually fits.
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Progress */}
           <div className="mb-10">
             <StepIndicator
               totalSteps={totalSteps}
@@ -120,18 +161,16 @@ export function AIPlan() {
             />
           </div>
 
-          {/* Navigation */}
+          {/* Nav */}
           <div className="flex items-center justify-between">
             <button
               type="button"
               onClick={handleBack}
               disabled={step === 0}
               className={`flex items-center gap-2 text-sm font-medium transition-colors ${
-                step === 0
-                  ? 'text-slate-700 cursor-not-allowed'
-                  : 'text-slate-400 hover:text-slate-200'
+                step === 0 ? 'text-slate-700 cursor-not-allowed' : 'text-slate-400 hover:text-slate-200'
               }`}
-              aria-label="Previous question"
+              aria-label="Go to previous question"
             >
               <ArrowLeft size={15} />
               Back
@@ -139,26 +178,26 @@ export function AIPlan() {
 
             <div className="flex items-center gap-3">
               {currentAnswer && !isLast && (
-                <span className="text-slate-600 text-xs animate-pulse">
+                <motion.span
+                  className="text-slate-600 text-xs"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0.5, 1] }}
+                  transition={{ duration: 0.8, repeat: Infinity }}
+                >
                   Continuing…
-                </span>
+                </motion.span>
               )}
               {!currentAnswer && (
-                <Button
-                  onClick={() => undefined}
-                  disabled
-                  size="sm"
-                  variant="ghost"
-                >
+                <span className="text-slate-700 text-xs">
                   Select an option to continue
-                </Button>
+                </span>
               )}
               {currentAnswer && isLast && (
                 <Button
                   onClick={() => navigate('/ai-plan/results', { state: { answers } })}
                   size="md"
                 >
-                  Generate My Plan <ArrowRight size={15} />
+                  Generate My Plan →
                 </Button>
               )}
             </div>
