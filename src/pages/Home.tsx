@@ -6,10 +6,10 @@ import { Button } from '@/components/ui/Button'
 
 function fadeUp(delay = 0) {
   return {
-    initial: { opacity: 0, y: 18 },
+    initial: { opacity: 0, y: 14 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true },
-    transition: { duration: 0.5, delay },
+    viewport: { once: true, amount: 0.05 },
+    transition: { duration: 0.45, delay },
   }
 }
 
@@ -292,10 +292,9 @@ export function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {edgeCards.map((c, i) => (
-              <motion.div key={c.label} {...fadeUp(i * 0.08)}>
-                <div className="glass-card rounded-2xl p-6 h-full flex flex-col items-start border border-white/[0.05] hover:border-amber-500/30 transition-all duration-300 bg-[#0a0f1c]/70 hover:bg-[#0a0f1c] hover:shadow-[0_0_30px_rgba(245,158,11,0.07)] group relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-28 h-28 bg-amber-500/8 rounded-full blur-[50px] -mr-14 -mt-14 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="w-10 h-10 rounded-xl bg-[#0e1526] border border-amber-500/20 flex items-center justify-center mb-5 text-amber-500 group-hover:scale-110 group-hover:bg-amber-500/10 transition-all duration-300">
+              <motion.div key={c.label} {...fadeUp(i * 0.06)}>
+                <div className="rounded-2xl p-6 h-full flex flex-col items-start border border-white/10 hover:border-amber-500/40 transition-all duration-300 bg-[#0d1220] hover:bg-[#0f1428] hover:shadow-[0_0_30px_rgba(245,158,11,0.08)] group">
+                  <div className="w-10 h-10 rounded-xl bg-[#111827] border border-amber-500/30 flex items-center justify-center mb-5 text-amber-400 group-hover:scale-110 group-hover:border-amber-500/60 transition-all duration-300">
                     <c.icon size={18} strokeWidth={2} />
                   </div>
                   <h3 className="text-white font-bold text-sm mb-2.5 leading-snug">{c.label}</h3>
@@ -311,7 +310,7 @@ export function Home() {
       {/* ══════════════════════════════════════════════════════════════
           3. PRODUCTS × INDUSTRIES ECOSYSTEM
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-4 sm:px-6 relative border-t border-white/[0.04] overflow-hidden">
+      <section className="py-24 px-4 sm:px-6 relative border-t border-white/[0.04]">
         <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none mix-blend-screen" />
 
         <div className="relative max-w-6xl mx-auto z-10">
@@ -331,10 +330,10 @@ export function Home() {
             </div>
 
             {/* What we build */}
-            <motion.div {...fadeUp(0.1)}>
-              <div className="glass-card rounded-2xl p-8 border border-blue-500/20 bg-gradient-to-br from-blue-900/[0.05] to-[#070A12] hover:shadow-[0_0_36px_rgba(59,130,246,0.08)] transition-shadow h-full flex flex-col">
-                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-blue-500/15">
-                  <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400">
+            <motion.div {...fadeUp(0.08)}>
+              <div className="rounded-2xl pt-7 px-8 pb-8 border border-blue-500/25 bg-[#0b1220] hover:shadow-[0_0_36px_rgba(59,130,246,0.10)] transition-shadow h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-blue-500/20">
+                  <div className="p-2.5 bg-blue-500/15 border border-blue-500/30 rounded-xl text-blue-400">
                     <Box size={22} />
                   </div>
                   <h3 className="text-xl font-bold text-white">What we build</h3>
@@ -359,10 +358,10 @@ export function Home() {
             </motion.div>
 
             {/* Where we apply it */}
-            <motion.div {...fadeUp(0.18)}>
-              <div className="glass-card rounded-2xl p-8 border border-purple-500/20 bg-gradient-to-bl from-purple-900/[0.05] to-[#070A12] hover:shadow-[0_0_36px_rgba(168,85,247,0.08)] transition-shadow h-full flex flex-col">
-                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-purple-500/15">
-                  <div className="p-2.5 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-400">
+            <motion.div {...fadeUp(0.15)}>
+              <div className="rounded-2xl pt-7 px-8 pb-8 border border-purple-500/25 bg-[#0d0b1c] hover:shadow-[0_0_36px_rgba(168,85,247,0.10)] transition-shadow h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-purple-500/20">
+                  <div className="p-2.5 bg-purple-500/15 border border-purple-500/30 rounded-xl text-purple-400">
                     <Building2 size={22} />
                   </div>
                   <h3 className="text-xl font-bold text-white">Where we apply it</h3>
@@ -400,19 +399,19 @@ export function Home() {
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {coreSystems.map((sys, i) => (
-              <motion.div key={sys.id} {...fadeUp(i * 0.1)}>
+              <motion.div key={sys.id} {...fadeUp(i * 0.07)}>
                 <Link to={`/products#${sys.id}`} className="block h-full group">
                   <div
-                    className="rounded-2xl p-8 h-full border border-white/5 transition-all hover:-translate-y-1.5 duration-500 flex flex-col relative overflow-hidden backdrop-blur-sm"
+                    className="rounded-2xl p-8 h-full transition-all hover:-translate-y-1.5 duration-500 flex flex-col relative"
                     style={{
-                      background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${sys.glow} 0%, transparent 70%), linear-gradient(to bottom right, rgba(10,15,28,0.95), rgba(5,8,15,0.95))`,
-                      boxShadow: `0 0 0 1px ${sys.border} inset, 0 16px 36px -16px rgba(0,0,0,0.5)`,
+                      background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${sys.glow} 0%, transparent 70%), rgb(10,14,26)`,
+                      boxShadow: `0 0 0 1px ${sys.border} inset`,
                     }}
                   >
                     <div
-                      className="absolute top-0 left-0 w-full h-0.5"
+                      className="absolute top-0 left-0 w-full h-0.5 rounded-t-2xl"
                       style={{ background: `linear-gradient(to right, transparent, ${sys.accent}, transparent)` }}
                     />
                     <div className="text-2xl font-black mb-2" style={{ color: sys.accent }}>
@@ -420,7 +419,7 @@ export function Home() {
                     </div>
                     <div
                       className="text-[10px] font-extrabold uppercase tracking-widest mb-5"
-                      style={{ color: sys.accent, opacity: 0.85 }}
+                      style={{ color: sys.accent }}
                     >
                       {sys.type}
                     </div>
