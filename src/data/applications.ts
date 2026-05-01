@@ -15,8 +15,8 @@ export const applicationDomains: ApplicationDomain[] = [
   },
   {
     id: 'healthcare',
-    name: 'Healthcare',
-    description: 'Clinical decision support and patient outcome modelling for healthcare providers.',
+    name: 'Diagnostic Labs',
+    description: 'Clinical intelligence layers for diagnostic infrastructure and imaging centers.',
     icon: '🏥',
   },
   {
@@ -85,10 +85,10 @@ export const applications: Application[] = [
   // ─── Healthcare ────────────────────────────────────────────────────────────
   {
     id: 'clinos',
-    name: 'Clinos',
-    tagline: 'Clinical decision support built on patient-level outcome modelling and protocol adherence intelligence.',
+    name: 'CLINOS',
+    tagline: 'Clinical Intelligence for Diagnostic Labs',
     description:
-      'Clinos applies ORBITAL diagnostic intelligence to patient data to surface structural patterns in clinical outcomes — identifying which protocol deviations correlate with adverse events and which patient profiles respond best to specific interventions. Designed for clinical teams who need evidence structured for decision-making, not just data for reporting.',
+      'CLINOS is an intelligence layer for diagnostic infrastructure. It does not replace existing lab systems; it turns their outputs into decision-ready intelligence. It turns diagnostic data into structured insight, clinical decision support, and system-level intelligence.',
     domain: 'healthcare',
     poweredBy: ['orbital', 'simfore'],
     status: 'coming-soon',

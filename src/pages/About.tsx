@@ -1,249 +1,256 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, BarChart3, Cpu, Shield, Target, Lightbulb, Users } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
-import { SectionHeader } from '@/components/sections/SectionHeader'
-import { CTABanner } from '@/components/sections/CTABanner'
+import { CheckCircle2 } from 'lucide-react'
 
-const khadijaStrengths = [
-  { icon: BarChart3, label: 'Financial Analysis & Strategy' },
-  { icon: Shield, label: 'Risk Assessment & Management' },
-  { icon: Target, label: 'Business Decision Quality' },
-  { icon: Lightbulb, label: 'Commercial & Operational Clarity' },
-]
+import khadijaImg from '@/assets/khadija-khaldun.jpeg'
+import ammarImg from '@/assets/ammar-raja.png'
 
-const ammarStrengths = [
-  { icon: Cpu, label: 'System Architecture & AI Engineering' },
-  { icon: BarChart3, label: 'Data Infrastructure & Pipelines' },
-  { icon: Target, label: 'Scalable Technical Implementation' },
-  { icon: Users, label: 'Product Design & Delivery' },
-]
-
-const values = [
-  {
-    title: 'Decisions over data',
-    description: 'Data is only valuable when it drives better decisions. Every system we build is evaluated by this standard.',
-  },
-  {
-    title: 'Clarity over complexity',
-    description: 'We design intelligence systems that make things clearer, not more complex. Simplicity is a feature.',
-  },
-  {
-    title: 'Outcomes over outputs',
-    description: 'We measure success by the quality of decisions our clients make — not by the volume of data processed.',
-  },
-  {
-    title: 'Finance-informed thinking',
-    description: 'Every AI system should be justifiable in business terms. We bring financial rigor to technical architecture.',
-  },
-]
+function fadeUp(delay = 0) {
+  return {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.5, delay },
+  }
+}
 
 export function About() {
   return (
-    <>
-      {/* Hero */}
-      <section className="relative py-24 hero-gradient grid-bg overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/8 rounded-full blur-3xl" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center pt-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="inline-block text-purple-400 text-sm font-semibold tracking-widest uppercase mb-4">
-              About Khaldun Systems
+    <div className="min-h-screen bg-[#070A12]">
+      
+      {/* ══════════════════════════════════════════════════════════════
+          1. HERO
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="pt-32 pb-16 px-4 sm:px-6 relative overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
+        
+        <div className="relative max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left: Copy */}
+          <motion.div {...fadeUp(0)}>
+            <span className="inline-block text-purple-400 text-xs font-semibold tracking-widest uppercase mb-4 bg-purple-400/8 border border-purple-400/20 rounded-full px-4 py-1.5">
+              ABOUT US
             </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Two perspectives.{' '}
-              <span className="gradient-text">One purpose.</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              Our Story. <br />
+              <span className="gradient-text">Our Partnership.</span>
             </h1>
-            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
-              Khaldun Systems was built on a conviction: that the best AI systems aren't just technically excellent — they're financially grounded, decision-focused, and built for real business impact.
+            <p className="text-slate-400 text-base sm:text-lg leading-relaxed max-w-lg">
+              Khaldun Systems was founded at the intersection of finance and technology — bringing together structured business thinking and deep technical execution to build AI systems that don't just automate, but think, simulate, and guide decisions.
             </p>
+          </motion.div>
+
+          {/* Right: CSS Venn Visual */}
+          <motion.div {...fadeUp(0.1)} className="relative h-64 sm:h-80 flex items-center justify-center pointer-events-none mt-10 lg:mt-0">
+            {/* Left Circle - Business */}
+            <div className="absolute left-1/2 -translate-x-[65%] w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-blue-500/40 bg-blue-500/10 backdrop-blur-md flex items-center justify-start pl-6 sm:pl-10 shadow-[0_0_40px_rgba(59,130,246,0.15)]">
+              <span className="text-blue-300 font-semibold text-sm sm:text-base leading-tight">Business <br/>Intelligence</span>
+            </div>
+            {/* Right Circle - Tech */}
+            <div className="absolute left-1/2 -translate-x-[35%] w-48 h-48 sm:w-64 sm:h-64 rounded-full border border-purple-500/40 bg-purple-500/10 backdrop-blur-md flex items-center justify-end pr-6 sm:pr-10 shadow-[0_0_40px_rgba(139,92,246,0.15)]">
+              <span className="text-purple-300 font-semibold text-sm sm:text-base leading-tight text-right">Technical <br/>Excellence</span>
+            </div>
+            {/* Intersection Label */}
+            <div className="absolute z-10 text-center font-bold text-white text-sm sm:text-lg drop-shadow-md">
+              Intelligent<br/>Decisions
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* The Partnership */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="Meet the Founders"
-            title="The strength of a"
-            titleHighlight="complementary partnership"
-            description="Khadija brings financial intelligence and business decision clarity. Ammar brings technical architecture and AI implementation. Together, they build systems that perform at both levels."
-          />
+      {/* ══════════════════════════════════════════════════════════════
+          2. FOUNDER CARDS
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto space-y-12">
+          
+          {/* Khadija Card */}
+          <motion.div {...fadeUp(0)}>
+            <div className="glass-card rounded-2xl overflow-hidden border border-white/[0.08] flex flex-col md:flex-row bg-[#080d1a]">
+              {/* Image Side */}
+              <div className="w-full md:w-[45%] h-80 md:h-auto relative">
+                <img 
+                  src={khadijaImg} 
+                  alt="Khadija" 
+                  className="w-full h-full object-cover object-[center_top] brightness-110 contrast-105"
+                />
+                <div className="absolute inset-0 border-r border-white/5 pointer-events-none hidden md:block" />
+              </div>
+              
+              {/* Text Side */}
+              <div className="w-full md:w-[55%] p-8 sm:p-10 flex flex-col justify-center">
+                <p className="text-blue-400 text-xs font-bold tracking-widest uppercase mb-2">Co-Founder — Business Intelligence & Strategy</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">Khadija</h2>
+                <p className="text-slate-300 font-semibold text-sm tracking-wide uppercase mb-6">{`Finance. Strategy. Intelligence.`}</p>
+                
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  A Chartered Accountant with deep experience across finance, operations, and risk. Khadija's work focuses on turning business complexity into clarity — designing intelligence systems that help organizations analyze, simulate, and make better decisions.
+                </p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Khadija */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <Card glow className="h-full p-8">
-                <div className="flex items-start gap-5 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-2xl font-bold">K</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Khadija</h3>
-                    <p className="text-blue-400 text-sm font-medium">Co-Founder — Business Intelligence & Strategy</p>
-                    <p className="text-slate-500 text-xs mt-1">Chartered Accountant | Finance, Risk & Decision Strategy</p>
-                  </div>
+                <div className="bg-white/5 border-l-2 border-blue-500 p-4 mb-6 italic text-slate-300 text-sm leading-relaxed">
+                  "How can businesses make better decisions with the data they already have?"
                 </div>
 
-                <div className="space-y-4 mb-8">
-                  <p className="text-slate-300 leading-relaxed">
-                    A Chartered Accountant with deep expertise in financial analysis, risk management, and strategic decision-making. Khadija ensures that every AI system Khaldun builds is grounded in business reality.
-                  </p>
+                <p className="text-slate-400 text-sm leading-relaxed mb-8">
+                  Her perspective ensures every Khaldun system is grounded in real business impact, structured thinking, and long-term decision quality.
+                </p>
+
+                <div className="mt-auto flex flex-wrap gap-2">
+                  <span className="bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full">Chartered Accountant</span>
+                  <span className="bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs font-semibold px-3 py-1.5 rounded-full">Business & Strategy Leader</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Ammar Card */}
+          <motion.div {...fadeUp(0.1)}>
+            <div className="glass-card rounded-2xl overflow-hidden border border-white/[0.08] flex flex-col md:flex-row-reverse bg-[#080d1a]">
+              {/* Image Side */}
+              <div className="w-full md:w-[45%] h-80 md:h-auto relative">
+                <img 
+                  src={ammarImg} 
+                  alt="Ammar" 
+                  className="w-full h-full object-cover object-[center_top] brightness-110 contrast-105"
+                />
+                <div className="absolute inset-0 border-l border-white/5 pointer-events-none hidden md:block" />
+              </div>
+              
+              {/* Text Side */}
+              <div className="w-full md:w-[55%] p-8 sm:p-10 flex flex-col justify-center">
+                <p className="text-purple-400 text-xs font-bold tracking-widest uppercase mb-2">Co-Founder — Technology & System Architecture</p>
+                <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">Ammar</h2>
+                <p className="text-slate-300 font-semibold text-sm tracking-wide uppercase mb-6">{`Technology. Architecture. Execution.`}</p>
+                
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                  A system architect and AI engineer focused on scalable infrastructure, clean architecture, and real-world implementation. Ammar translates strategic intent into technical systems that perform under real operating conditions.
+                </p>
+
+                <p className="text-slate-400 text-sm leading-relaxed mb-8">
+                  At Khaldun Systems, Ammar leads the technical foundation — designing system architecture, integrating data and AI models, and building workflows that power intelligent decision systems.
+                </p>
+
+                <div className="mt-auto flex flex-wrap gap-2">
+                  <span className="bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold px-3 py-1.5 rounded-full">AI & Systems Architect</span>
+                  <span className="bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold px-3 py-1.5 rounded-full">Technology & Product Leader</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          3. PARTNERSHIP BUILT FOR IMPACT
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div {...fadeUp(0)}>
+            <div className="glass-card rounded-3xl p-8 sm:p-12 border border-white/[0.08] bg-[#0b1020]/80">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                {/* Left */}
+                <div>
+                  <span className="inline-block text-blue-400 text-xs font-semibold tracking-widest uppercase mb-4">TOGETHER</span>
+                  <h2 className="text-3xl font-bold text-white mb-4">A Partnership Built for Impact</h2>
                   <p className="text-slate-400 text-sm leading-relaxed">
-                    Her perspective shapes how we frame problems: not as technology challenges, but as decision quality challenges that technology can solve. She brings the financial rigor that keeps AI implementations accountable to outcomes that matter.
+                    Khaldun Systems is the result of a complementary partnership — uniting business insight with technical depth. We combine finance-driven decision thinking with technology-driven system architecture to create AI systems that solve real decision problems.
                   </p>
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Areas of Expertise</p>
-                  {khadijaStrengths.map(({ icon: Icon, label }) => (
-                    <div key={label} className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                        <Icon size={14} className="text-blue-400" />
+                {/* Right: Horizontal process line */}
+                <div className="relative">
+                  <div className="hidden sm:block absolute top-4 left-6 right-6 h-0.5 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-teal-500/30 z-0" />
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 sm:gap-2 relative z-10">
+                    {[
+                      { step: 1, title: 'Understand', text: 'Deep business understanding to identify what truly matters.' },
+                      { step: 2, title: 'Design', text: 'Intelligence systems designed to analyze, simulate, and guide.' },
+                      { step: 3, title: 'Build', text: 'Scalable, secure, and reliable technical architecture.' },
+                      { step: 4, title: 'Guide', text: 'Actionable insights that drive better decisions and outcomes.' },
+                    ].map((s) => (
+                      <div key={s.step} className="flex flex-row sm:flex-col items-start sm:items-center text-left sm:text-center gap-4 sm:gap-0">
+                        <div className="w-8 h-8 rounded-full bg-[#080d1a] border border-blue-500/40 text-blue-400 flex items-center justify-center font-bold text-xs sm:mb-4 flex-shrink-0">
+                          {s.step}
+                        </div>
+                        <div>
+                          <h4 className="text-white font-bold text-sm mb-1">{s.title}</h4>
+                          <p className="text-slate-500 text-xs leading-relaxed">{s.text}</p>
+                        </div>
                       </div>
-                      <span className="text-slate-300 text-sm">{label}</span>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          4. VISION BLOCK
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-16 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto">
+          <motion.div {...fadeUp(0)}>
+            <div className="glass-card rounded-3xl p-8 sm:p-12 border border-white/[0.08] bg-[#0b1020]/60">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                {/* Left */}
+                <div>
+                  <span className="inline-block text-purple-400 text-xs font-semibold tracking-widest uppercase mb-4">OUR VISION</span>
+                  <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">Intelligence for Better Decisions.</h2>
+                  <p className="text-slate-400 text-sm leading-relaxed max-w-md">
+                    To bridge the gap between data and decisions — helping organizations move from reactive operations to proactive strategies, fragmented tools to connected ecosystems, and data-heavy to decision-ready.
+                  </p>
+                </div>
+
+                {/* Right: Three compact cards */}
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    { title: 'Built for Any Industry', text: 'Core intelligence systems that adapt to unique industry challenges.' },
+                    { title: 'Custom Solutions That Fit', text: 'Tailored applications for sectors like education, healthcare, finance, legal, and beyond.' },
+                    { title: 'Human + AI Collaboration', text: 'We combine human judgment with AI intelligence to improve decision quality.' }
+                  ].map((card, i) => (
+                    <div key={i} className="glass-card rounded-xl p-5 border-white/5 bg-white/[0.02] flex items-start gap-3 hover:bg-white/[0.04] transition-colors">
+                      <div className="mt-0.5"><CheckCircle2 size={16} className="text-purple-400" /></div>
+                      <div>
+                        <h4 className="text-white font-bold text-sm mb-1">{card.title}</h4>
+                        <p className="text-slate-500 text-xs leading-relaxed">{card.text}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </Card>
-            </motion.div>
 
-            {/* Ammar */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <Card glow className="h-full p-8">
-                <div className="flex items-start gap-5 mb-6">
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-2xl font-bold">A</span>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-white">Ammar</h3>
-                    <p className="text-purple-400 text-sm font-medium">Co-Founder — Technology & System Architecture</p>
-                    <p className="text-slate-500 text-xs mt-1">AI Engineer | System Architecture & Implementation</p>
-                  </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          5. FINAL QUOTE
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="py-20 px-4 sm:px-6 pb-32">
+        <div className="max-w-4xl mx-auto">
+          <motion.div {...fadeUp(0)}>
+            <div className="glass-card rounded-2xl p-8 sm:p-10 border border-white/[0.08] flex flex-col md:flex-row items-center justify-between gap-8 bg-[#070A12] shadow-[0_0_40px_rgba(59,130,246,0.05)]">
+              <div className="text-center md:text-left flex-1">
+                <p className="text-slate-300 text-lg sm:text-xl leading-relaxed italic font-medium">
+                  "The gap between data and decision is where value is lost.<br className="hidden sm:block" /> We exist to bridge that gap."
+                </p>
+              </div>
+              <div className="flex-shrink-0 flex flex-col items-center justify-center opacity-80">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mb-2 shadow-lg shadow-blue-500/20">
+                  <span className="text-white font-bold">K</span>
                 </div>
-
-                <div className="space-y-4 mb-8">
-                  <p className="text-slate-300 leading-relaxed">
-                    A systems architect and AI engineer with expertise in building scalable, intelligent infrastructure. Ammar translates the strategic intent of every engagement into technical systems that perform under real-world conditions.
-                  </p>
-                  <p className="text-slate-400 text-sm leading-relaxed">
-                    His approach to architecture is shaped by a fundamental belief: that technical complexity should serve clarity, not create it. He builds systems that are powerful under the hood but decision-oriented at the surface.
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Areas of Expertise</p>
-                  {ammarStrengths.map(({ icon: Icon, label }) => (
-                    <div key={label} className="flex items-center gap-3">
-                      <div className="w-7 h-7 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                        <Icon size={14} className="text-purple-400" />
-                      </div>
-                      <span className="text-slate-300 text-sm">{label}</span>
-                    </div>
-                  ))}
-                </div>
-              </Card>
-            </motion.div>
-          </div>
+                <span className="text-slate-500 text-xs font-bold tracking-widest uppercase">Khaldun Systems</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* The Combination */}
-      <section className="py-24 relative">
-        <div className="absolute inset-0 grid-bg opacity-20" />
-        <div className="relative max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="glass-card rounded-2xl p-10 text-center glow-border">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-blue-400 text-sm font-semibold tracking-widest uppercase mb-4 block">
-                The Combined Capability
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-                Finance-driven decision intelligence<br />
-                <span className="text-slate-500">+</span><br />
-                Technology-driven system architecture
-              </h2>
-              <p className="text-xl text-blue-300 font-medium mb-4">
-                = Intelligence systems that create measurable impact.
-              </p>
-              <p className="text-slate-400 max-w-xl mx-auto leading-relaxed">
-                This combination is rare. Most AI companies are purely technical — they build impressive systems without business grounding. We build systems that are technically excellent because they're commercially accountable.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeader
-            eyebrow="What We Believe"
-            title="The principles that shape"
-            titleHighlight="how we build"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {values.map((value, i) => (
-              <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-              >
-                <Card className="h-full">
-                  <h3 className="text-white font-semibold mb-2">{value.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">{value.description}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-12 text-center">
-        <div className="max-w-xl mx-auto px-4">
-          <p className="text-slate-400 mb-6 text-lg">
-            Want to see what we'd build for you?
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button to="/ai-plan" size="lg">
-              Get Your AI Plan <ArrowRight size={16} />
-            </Button>
-            <Button to="/contact" variant="ghost" size="lg">
-              Talk to the Founders
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <CTABanner
-        title="Let's build something that matters."
-        description="Every engagement starts with understanding your decisions — not your data. Book a strategy call and we'll tell you exactly where AI can make the difference."
-        primaryLabel="Book a Strategy Call"
-        primaryTo="/contact"
-        secondaryLabel="See Our Work"
-        secondaryTo="/products"
-      />
-    </>
+    </div>
   )
 }

@@ -3,13 +3,12 @@ import { ArrowRight } from 'lucide-react'
 
 const footerLinks = {
   Platform: [
-    { label: 'Intelligence Systems', path: '/intelligence-systems' },
-    { label: 'Applications', path: '/applications' },
-    { label: 'Assessments', path: '/assessments' },
+    { label: 'Products', path: '/applications' },
+    { label: 'AI Plan', path: '/assessments' },
+    { label: 'Industries', path: '/industries' },
   ],
   Company: [
-    { label: 'About', path: '/about' },
-    { label: 'Resources', path: '/resources' },
+    { label: 'Founders', path: '/about' },
     { label: 'Contact', path: '/contact' },
   ],
 }

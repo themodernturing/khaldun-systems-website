@@ -11,7 +11,6 @@ import { AIPlan } from '@/pages/AIPlan'
 import { AIPlanResults } from '@/pages/AIPlanResults'
 
 // Legacy pages — kept for any inbound links, redirect via nav
-import { Products } from '@/pages/Products'
 import { Industries } from '@/pages/Industries'
 import { Ecosystem } from '@/pages/Ecosystem'
 import { Technology } from '@/pages/Technology'
@@ -39,6 +38,7 @@ export function AppRoutes() {
       {/* Primary routes */}
       <Route path="/" element={<Layout><Home /></Layout>} />
       <Route path="/intelligence-systems" element={<Layout><IntelligenceSystems /></Layout>} />
+      <Route path="/products" element={<Layout><Applications /></Layout>} />
       <Route path="/applications" element={<Layout><Applications /></Layout>} />
       <Route path="/assessments" element={<Layout><Assessments /></Layout>} />
       <Route path="/about" element={<Layout><About /></Layout>} />
@@ -46,7 +46,7 @@ export function AppRoutes() {
       <Route path="/contact" element={<Layout><Contact /></Layout>} />
 
       {/* Legacy routes */}
-      <Route path="/products" element={<Layout><Products /></Layout>} />
+
       <Route path="/industries" element={<Layout><Industries /></Layout>} />
       <Route path="/ecosystem" element={<Layout><Ecosystem /></Layout>} />
       <Route path="/technology" element={<Layout><Technology /></Layout>} />
