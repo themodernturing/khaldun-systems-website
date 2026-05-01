@@ -1,77 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, Zap, Layers, Cpu, Clock, Box, Building2, ChevronRight, Activity } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-
-// ─── Data ──────────────────────────────────────────────────────────────────────
-
-const triageOptions = [
-  { value: 'diagnose', label: 'Diagnose a business problem', detail: 'Find what is structurally happening now.' },
-  { value: 'simulate', label: 'Simulate a decision', detail: 'See what happens before you choose.' },
-  { value: 'build', label: 'Build an AI system', detail: 'Turn a workflow or domain problem into production AI.' },
-  { value: 'unsure', label: 'Not sure yet', detail: 'Let the system guide you.' },
-]
-
-const metrics = [
-  { value: '20+', label: 'Years Combined Experience' },
-  { value: '6', label: 'Industry Verticals' },
-  { value: '4', label: 'Continents Advised' },
-  { value: 'Weeks', label: 'From Strategy to Deployment' },
-]
-
-const edgeCards = [
-  { label: 'Designed for High-Stakes Decisions', detail: 'Designed with the discipline required for critical business decisions.' },
-  { label: 'Built on First Principles', detail: 'Combining financial thinking with modern AI system design.' },
-  { label: 'Strategy + Engineering', detail: 'No separation between thinking and execution — systems are designed end-to-end.' },
-  { label: 'Time to Impact', detail: 'From problem to working system in weeks.' },
-]
-
-const ecosystemDomains = [
-  { label: 'Finance & Compliance', icon: '📊', apps: ['ECL Foresight', 'ConsolidateAI'] },
-  { label: 'Education & Assessment', icon: '🎓', apps: ['AI Seekho', 'SchoolIQ', 'MindMatch'] },
-  { label: 'Diagnostic Lab Intelligence', icon: '🏥', apps: ['CLINOS'] },
-  { label: 'Legal & Professional', icon: '⚖️', apps: ['LexFlow AI', 'Tax Law Agent', 'Legal CRM'] },
-  { label: 'Executive & Strategic', icon: '🧭', apps: ['ORBITAL', 'MAGNUS', 'SIMFORE'] },
-  { label: 'Sustainability & Climate', icon: '🌿', apps: ['EmissIQ Carbon'] },
-  { label: 'Custom Intelligence', icon: '⚙️', apps: ['Bespoke AI Systems'] },
-]
-
-const coreSystems = [
-  {
-    id: 'orbital', name: 'ORBITAL', type: 'Diagnostic Intelligence',
-    tagline: 'Reveal the underlying structure of your business before acting.',
-    accent: '#3b82f6', glow: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.25)',
-  },
-  {
-    id: 'magnus', name: 'MAGNUS', type: 'Forensic Intelligence',
-    tagline: 'Expose the difference between perceived performance and real data.',
-    accent: '#8b5cf6', glow: 'rgba(139,92,246,0.12)', border: 'rgba(139,92,246,0.25)',
-  },
-  {
-    id: 'simfore', name: 'SIMFORE', type: 'Simulation Intelligence',
-    tagline: 'Evaluate decisions by modeling outcomes before execution.',
-    accent: '#06b6d4', glow: 'rgba(6,182,212,0.10)', border: 'rgba(6,182,212,0.25)',
-  },
-]
-
-const techGrid = [
-  { label: 'Agentic Reasoning', detail: 'Multi-step autonomous reasoning over complex domains.' },
-  { label: 'Predictive Engines', detail: 'Forward-looking probabilistic models for risk and demand.' },
-  { label: 'Automated Logic', detail: 'Decision rules embedded directly into operational workflows.' },
-  { label: 'Knowledge Synthesis', detail: 'Structured intelligence extracted from unstructured sources.' },
-  { label: 'ESG & Sustainability', detail: 'Regulatory-aligned emissions tracking and pathway modelling.' },
-  { label: 'Cognitive Interfaces', detail: 'Natural language interfaces over complex enterprise data.' },
-]
-
-const trustCards = [
-  { label: 'Designed for High-Stakes Decisions', detail: 'Designed with the discipline required for critical business decisions.' },
-  { label: 'Built on First Principles', detail: 'Combining financial thinking with modern AI system design.' },
-  { label: 'Strategy + Engineering', detail: 'No separation between thinking and execution — systems are designed end-to-end.' },
-  { label: 'Time to Impact', detail: 'From problem to working system in weeks.' },
-]
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function fadeUp(delay = 0) {
   return {
@@ -82,13 +13,85 @@ function fadeUp(delay = 0) {
   }
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="text-xs font-semibold tracking-[0.2em] uppercase text-slate-500 mb-3">{children}</p>
-  )
-}
+const triageOptions = [
+  { value: 'diagnose', label: 'Diagnose a business problem' },
+  { value: 'simulate', label: 'Simulate a decision' },
+  { value: 'build', label: 'Build an AI system' },
+  { value: 'unsure', label: 'Not sure yet' },
+]
 
-// ─── Component ────────────────────────────────────────────────────────────────
+const edgeCards = [
+  {
+    icon: Layers,
+    label: 'Designed for High-Stakes Decisions',
+    detail: 'Built for decisions where clarity, risk, and timing matter.',
+  },
+  {
+    icon: Cpu,
+    label: 'Built on First Principles',
+    detail: 'We start with business logic, not tool selection.',
+  },
+  {
+    icon: Zap,
+    label: 'Strategy + Engineering',
+    detail: 'Decision architecture and technical execution work together.',
+  },
+  {
+    icon: Clock,
+    label: 'Time to Impact',
+    detail: 'Focused systems designed to move from problem to working prototype quickly.',
+  },
+]
+
+const coreSystems = [
+  {
+    id: 'orbital',
+    name: 'ORBITAL',
+    type: 'Diagnostic Intelligence',
+    tagline: 'Reveal the underlying structure of your business before acting.',
+    accent: '#3b82f6',
+    glow: 'rgba(59,130,246,0.20)',
+    border: 'rgba(59,130,246,0.4)',
+  },
+  {
+    id: 'magnus',
+    name: 'MAGNUS',
+    type: 'Forensic Intelligence',
+    tagline: 'Expose the difference between perceived performance and real data.',
+    accent: '#f59e0b',
+    glow: 'rgba(245,158,11,0.15)',
+    border: 'rgba(245,158,11,0.4)',
+  },
+  {
+    id: 'simfore',
+    name: 'SIMFORE',
+    type: 'Simulation Intelligence',
+    tagline: 'Evaluate decisions by modeling outcomes before execution.',
+    accent: '#06b6d4',
+    glow: 'rgba(6,182,212,0.18)',
+    border: 'rgba(6,182,212,0.4)',
+  },
+]
+
+const productsList = [
+  'ORBITAL',
+  'MAGNUS',
+  'SIMFORE',
+  'ECL Foresight',
+  'CLINOS',
+  'MindMatch',
+  'LexFlow AI',
+  'EmissIQ Carbon',
+]
+
+const industriesList = [
+  'Diagnostic Labs',
+  'Finance',
+  'Education',
+  'Legal & Professional Services',
+  'Climate & Sustainability',
+  'Enterprise Strategy',
+]
 
 export function Home() {
   const navigate = useNavigate()
@@ -96,122 +99,151 @@ export function Home() {
   const [launching, setLaunching] = useState(false)
   const [freeText, setFreeText] = useState('')
 
-  function handleTriage(value: string) {
-    setSelected(value)
-  }
-
   function handleGenerate() {
     setLaunching(true)
-    setTimeout(() => navigate('/ai-plan'), 700)
+    setTimeout(() => navigate('/ai-plan'), 600)
   }
 
   return (
     <div style={{ background: '#070A12' }}>
 
       {/* ══════════════════════════════════════════════════════════════
-          1. HERO
+          1. HERO WITH AI PLAN PREVIEW
       ══════════════════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center overflow-hidden"
+        className="relative min-h-[95vh] flex items-center overflow-hidden"
         style={{
-          background: 'radial-gradient(ellipse 90% 60% at 50% -10%, rgba(29,78,216,0.22) 0%, transparent 65%), radial-gradient(ellipse 50% 35% at 85% 25%, rgba(109,40,217,0.13) 0%, transparent 55%), #070A12',
+          background:
+            'radial-gradient(ellipse 90% 60% at 50% -10%, rgba(29,78,216,0.18) 0%, transparent 65%), radial-gradient(ellipse 50% 35% at 85% 25%, rgba(109,40,217,0.10) 0%, transparent 55%), #070A12',
         }}
       >
-        <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none" />
+        <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none mix-blend-screen" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-blue-500/30 to-transparent pointer-events-none" />
 
-        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center z-10">
 
-          {/* Left */}
+          {/* Left: positioning copy */}
           <div>
-            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] uppercase px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/6 text-blue-300 mb-6">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-                Decision Intelligence Platform
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] uppercase px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-300 mb-6 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+                <Activity size={12} className="text-blue-400" />
+                DECISION INTELLIGENCE PLATFORM
               </span>
             </motion.div>
 
             <motion.h1
-              className="text-4xl sm:text-5xl lg:text-[3.4rem] font-extrabold text-white leading-[1.08] tracking-tight mb-5"
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55, delay: 0.08 }}
+              className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.08] tracking-tight mb-5"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.08 }}
             >
               AI Systems That <br />
-              <span className="gradient-text">Think, Simulate & Decide.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-100 to-blue-400">
+                Think, Simulate &amp; Decide.
+              </span>
             </motion.h1>
 
             <motion.p
-              className="text-slate-400 text-base leading-relaxed mb-8 max-w-lg"
-              initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.16 }}
+              className="text-slate-400 text-lg leading-relaxed mb-10 max-w-lg font-medium"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.16 }}
             >
               Khaldun Systems builds intelligence layers for businesses — turning data, workflows, and operations into decision-making ecosystems.
             </motion.p>
 
             <motion.div
-              className="flex flex-wrap gap-3 mb-10"
-              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.24 }}
+              className="flex flex-wrap gap-4"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.24 }}
             >
-              <Button to="/ai-plan" size="md">
-                Get Your AI Plan <ArrowRight size={14} />
+              <Button
+                to="/ai-plan"
+                size="lg"
+                className="shadow-[0_0_30px_rgba(59,130,246,0.25)] hover:shadow-[0_0_45px_rgba(59,130,246,0.4)] transition-shadow"
+              >
+                Get Your AI Intelligence Blueprint <ArrowRight size={16} className="ml-2" />
               </Button>
-              <Button to="/ecosystem" variant="ghost" size="md">
-                Explore the Ecosystem
+              <Button
+                to="/products"
+                variant="ghost"
+                size="lg"
+                className="border border-white/10 hover:bg-white/5"
+              >
+                Explore Products
               </Button>
-            </motion.div>
-
-            {/* Metrics */}
-            <motion.div
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.34 }}
-            >
-              {metrics.map((m) => (
-                <div key={m.label} className="border-l border-white/[0.08] pl-4">
-                  <div className="text-xl font-bold text-white">{m.value}</div>
-                  <div className="text-slate-500 text-xs leading-tight">{m.label}</div>
-                </div>
-              ))}
             </motion.div>
           </div>
 
-          {/* Right — AI Plan triage widget */}
+          {/* Right: AI Plan preview card */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, delay: 0.2 }}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.55, delay: 0.2 }}
           >
-            <div className="glass-card rounded-2xl p-6 glow-border" style={{ background: 'rgba(8,14,30,0.92)' }}>
-              <p className="text-white font-semibold text-base mb-1">Start with your challenge</p>
-              <p className="text-slate-500 text-xs mb-5">Select what fits — or describe it below.</p>
+            <div
+              className="glass-card rounded-[2rem] p-8 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.6)] backdrop-blur-xl relative overflow-hidden"
+              style={{ background: 'rgba(8,12,24,0.80)' }}
+            >
+              <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-500/12 blur-[80px] rounded-full pointer-events-none" />
+              <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-indigo-500/8 blur-[80px] rounded-full pointer-events-none" />
 
-              <div className="space-y-2 mb-5">
-                {triageOptions.map((opt) => {
-                  const isSelected = selected === opt.value
-                  return (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => handleTriage(opt.value)}
-                      className={`w-full text-left px-4 py-3 rounded-xl border transition-all duration-200 ${
-                        isSelected
-                          ? 'border-blue-400/50 bg-blue-500/8'
-                          : 'border-white/[0.06] hover:border-white/[0.14] hover:bg-white/[0.02]'
-                      }`}
-                    >
-                      <div className={`text-sm font-medium mb-0.5 ${isSelected ? 'text-white' : 'text-slate-300'}`}>
-                        {opt.label}
-                      </div>
-                      <div className="text-slate-500 text-xs">{opt.detail}</div>
-                    </button>
-                  )
-                })}
+              <div className="flex items-center gap-2 mb-5 relative z-10">
+                <div className="inline-flex h-6 items-center rounded-full bg-blue-500/20 px-2.5 text-[10px] font-bold tracking-wider text-blue-400 uppercase border border-blue-500/30">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse mr-1.5" />
+                  Live intake
+                </div>
+                <span className="text-[10px] font-semibold text-slate-500 tracking-wide">3-minute blueprint</span>
               </div>
 
-              {/* Free text */}
-              <div className="mb-4">
-                <label className="block text-slate-500 text-xs mb-1.5">Describe it in one sentence</label>
+              <h3 className="text-white font-bold text-xl mb-5 tracking-tight relative z-10">
+                Start with your challenge
+              </h3>
+
+              <div className="space-y-2.5 mb-5 relative z-10">
+                {triageOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => { setSelected(opt.value); handleGenerate(); }}
+                    className={`w-full text-left px-4 py-3 rounded-xl border transition-all duration-300 flex items-center justify-between group ${
+                      selected === opt.value
+                        ? 'border-blue-400/60 bg-blue-500/15 shadow-[0_0_15px_rgba(59,130,246,0.15)]'
+                        : 'border-white/[0.08] hover:border-blue-400/30 hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <span
+                      className={`text-sm font-semibold transition-colors ${
+                        selected === opt.value ? 'text-blue-100' : 'text-slate-300 group-hover:text-white'
+                      }`}
+                    >
+                      {opt.label}
+                    </span>
+                    <ArrowRight
+                      size={13}
+                      className={`transition-all ${
+                        selected === opt.value
+                          ? 'text-blue-400 translate-x-0.5'
+                          : 'text-slate-600 group-hover:text-slate-400'
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              <div className="mb-5 relative z-10">
                 <input
                   type="text"
                   value={freeText}
                   onChange={(e) => setFreeText(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                   placeholder="We are trying to..."
-                  className="w-full bg-white/[0.03] border border-white/[0.08] rounded-lg px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/40 transition-colors"
+                  className="w-full bg-[#03050a]/60 border border-white/[0.12] rounded-xl px-4 py-3.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500/50 focus:ring-1 focus:ring-blue-500/50 transition-all"
                 />
               </div>
 
@@ -219,143 +251,188 @@ export function Home() {
                 type="button"
                 onClick={handleGenerate}
                 disabled={launching}
-                className="w-full btn-primary rounded-lg py-3 text-sm font-semibold inline-flex items-center justify-center gap-2"
+                className="w-full btn-primary rounded-xl py-3.5 text-sm font-bold inline-flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.2)] hover:shadow-[0_0_30px_rgba(59,130,246,0.35)] relative z-10"
               >
                 {launching ? (
-                  <><Loader2 size={14} className="animate-spin" /><span>Preparing your plan…</span></>
+                  <>
+                    <Loader2 size={15} className="animate-spin" />
+                    <span>Preparing your plan…</span>
+                  </>
                 ) : (
-                  <><span>Start Your AI Plan</span><ArrowRight size={14} /></>
+                  <>
+                    <span>Start Your AI Plan</span>
+                    <ArrowRight size={15} />
+                  </>
                 )}
               </button>
             </div>
           </motion.div>
+
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
           2. THE KHALDUN EDGE
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 px-4 sm:px-6 relative">
-        <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto">
-          <motion.div {...fadeUp(0)} className="text-center mb-10">
-            <SectionLabel>The Khaldun Edge</SectionLabel>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
-              Named after Ibn Khaldun.<br />
-              <span className="gradient-text">Built for the AI era.</span>
-            </h2>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mx-auto mb-2">
-              Ibn Khaldun — the Arab polymath who understood complex systems centuries before modern strategy, economics, and AI.
-            </p>
-            <p className="text-slate-400 text-sm leading-relaxed max-w-2xl mx-auto">
-              Khaldun Systems carries that same principle: understand the system, identify the forces shaping it, then build intelligence that helps leaders act.
+      <section className="py-24 px-4 sm:px-6 relative border-t border-white/[0.04]">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-900/[0.025] to-transparent pointer-events-none" />
+        <div className="max-w-6xl mx-auto relative z-10">
+
+          <motion.div {...fadeUp(0)} className="text-center mb-14">
+            <div className="inline-flex items-center justify-center gap-4 mb-5">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-amber-500/60" />
+              <h2 className="text-3xl font-bold text-white tracking-wide">The Khaldun Edge</h2>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-amber-500/60" />
+            </div>
+            <p className="text-slate-400 text-base leading-relaxed max-w-2xl mx-auto">
+              Named after Ibn Khaldun, Khaldun Systems is built around a simple principle:{' '}
+              <span className="text-slate-300 font-medium">understand the system before trying to automate it.</span>
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {edgeCards.map((c, i) => (
-              <motion.div key={c.label} {...fadeUp(i * 0.07)}>
-                <div className="glass-card rounded-xl p-5 h-full">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 mb-3" />
-                  <h3 className="text-white font-semibold text-sm mb-1">{c.label}</h3>
-                  <p className="text-slate-500 text-xs leading-relaxed">{c.detail}</p>
+              <motion.div key={c.label} {...fadeUp(i * 0.08)}>
+                <div className="glass-card rounded-2xl p-6 h-full flex flex-col items-start border border-white/[0.05] hover:border-amber-500/30 transition-all duration-300 bg-[#0a0f1c]/70 hover:bg-[#0a0f1c] hover:shadow-[0_0_30px_rgba(245,158,11,0.07)] group relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-28 h-28 bg-amber-500/8 rounded-full blur-[50px] -mr-14 -mt-14 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="w-10 h-10 rounded-xl bg-[#0e1526] border border-amber-500/20 flex items-center justify-center mb-5 text-amber-500 group-hover:scale-110 group-hover:bg-amber-500/10 transition-all duration-300">
+                    <c.icon size={18} strokeWidth={2} />
+                  </div>
+                  <h3 className="text-white font-bold text-sm mb-2.5 leading-snug">{c.label}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{c.detail}</p>
                 </div>
               </motion.div>
             ))}
           </div>
+
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          4. THE KHALDUN AI ECOSYSTEM
+          3. PRODUCTS × INDUSTRIES ECOSYSTEM
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <motion.div {...fadeUp(0)} className="text-center mb-10">
-            <SectionLabel>The Khaldun AI Ecosystem</SectionLabel>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Intelligence systems adapted across focused domains.
+      <section className="py-24 px-4 sm:px-6 relative border-t border-white/[0.04] overflow-hidden">
+        <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none mix-blend-screen" />
+
+        <div className="relative max-w-6xl mx-auto z-10">
+          <motion.div {...fadeUp(0)} className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-white mb-3">
+              Products and industries work together.
             </h2>
+            <p className="text-slate-400 text-base max-w-xl mx-auto">
+              Explore Khaldun by what we build, or by where intelligence creates value.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {ecosystemDomains.map((domain, i) => (
-              <motion.div key={domain.label} {...fadeUp(i * 0.05)}>
-                <div className="glass-card rounded-xl p-5 h-full hover:border-blue-500/30 transition-colors">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-lg">{domain.icon}</span>
-                    <h3 className="text-white font-semibold text-xs">{domain.label}</h3>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 relative">
+            {/* Center connector arrow */}
+            <div className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-[#070A12] border border-white/10 items-center justify-center text-slate-500 shadow-[0_0_20px_rgba(0,0,0,0.8)]">
+              <ArrowRight size={18} />
+            </div>
+
+            {/* What we build */}
+            <motion.div {...fadeUp(0.1)}>
+              <div className="glass-card rounded-2xl p-8 border border-blue-500/20 bg-gradient-to-br from-blue-900/[0.05] to-[#070A12] hover:shadow-[0_0_36px_rgba(59,130,246,0.08)] transition-shadow h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-blue-500/15">
+                  <div className="p-2.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400">
+                    <Box size={22} />
                   </div>
-                  <div className="space-y-1">
-                    {domain.apps.map((app) => (
-                      <div key={app} className="text-slate-500 text-xs">· {app}</div>
-                    ))}
-                  </div>
+                  <h3 className="text-xl font-bold text-white">What we build</h3>
                 </div>
-              </motion.div>
-            ))}
+
+                <ul className="space-y-3.5 mb-8 flex-1">
+                  {productsList.map((item) => (
+                    <li key={item} className="flex items-center text-slate-300 text-sm font-medium group">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500/70 mr-3.5 shadow-[0_0_8px_rgba(59,130,246,0.7)] flex-shrink-0 group-hover:scale-125 transition-transform" />
+                      <span className="group-hover:text-white transition-colors">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  to="/products"
+                  className="w-full justify-center bg-blue-600/10 text-blue-300 hover:bg-blue-600/20 border border-blue-500/30"
+                >
+                  Explore Products <ArrowRight size={14} className="ml-2" />
+                </Button>
+              </div>
+            </motion.div>
+
+            {/* Where we apply it */}
+            <motion.div {...fadeUp(0.18)}>
+              <div className="glass-card rounded-2xl p-8 border border-purple-500/20 bg-gradient-to-bl from-purple-900/[0.05] to-[#070A12] hover:shadow-[0_0_36px_rgba(168,85,247,0.08)] transition-shadow h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-7 pb-6 border-b border-purple-500/15">
+                  <div className="p-2.5 bg-purple-500/10 border border-purple-500/20 rounded-xl text-purple-400">
+                    <Building2 size={22} />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Where we apply it</h3>
+                </div>
+
+                <ul className="space-y-3.5 mb-8 flex-1">
+                  {industriesList.map((item) => (
+                    <li key={item} className="flex items-center text-slate-300 text-sm font-medium group">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500/70 mr-3.5 shadow-[0_0_8px_rgba(168,85,247,0.7)] flex-shrink-0 group-hover:scale-125 transition-transform" />
+                      <span className="group-hover:text-white transition-colors">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <Button
+                  to="/industries"
+                  className="w-full justify-center bg-purple-600/10 text-purple-300 hover:bg-purple-600/20 border border-purple-500/30"
+                >
+                  Explore Industries <ArrowRight size={14} className="ml-2" />
+                </Button>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          5. CORE INTELLIGENCE SYSTEMS
+          4. THREE FLAGSHIP SYSTEMS
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 relative">
-        <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto">
-          <motion.div {...fadeUp(0)} className="text-center mb-10">
-            <SectionLabel>Core Intelligence Systems</SectionLabel>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
+      <section className="py-24 px-4 sm:px-6 relative border-t border-white/[0.04]">
+        <div className="max-w-7xl mx-auto">
+          <motion.div {...fadeUp(0)} className="text-center mb-14">
+            <h2 className="text-3xl font-bold text-white">
               Three flagship systems. One intelligence architecture.
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {coreSystems.map((sys, i) => (
-              <motion.div key={sys.id} {...fadeUp(i * 0.08)}>
-                <div
-                  className="rounded-2xl p-6 h-full border transition-all hover:-translate-y-1 duration-300"
-                  style={{
-                    background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${sys.glow} 0%, transparent 70%), rgba(8,14,30,0.9)`,
-                    borderColor: sys.border,
-                  }}
-                >
-                  <div className="text-2xl font-extrabold mb-1" style={{ color: sys.accent }}>{sys.name}</div>
-                  <div className="text-xs font-semibold mb-3" style={{ color: sys.accent, opacity: 0.7 }}>{sys.type}</div>
-                  <p className="text-slate-400 text-sm leading-relaxed">{sys.tagline}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div {...fadeUp(0.2)} className="text-center mt-8">
-            <Button to="/intelligence-systems" variant="ghost" size="sm">
-              Explore full system capabilities <ArrowRight size={13} />
-            </Button>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          6. OUR TECHNOLOGY
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
-          <motion.div {...fadeUp(0)} className="text-center mb-10">
-            <SectionLabel>Our Technology</SectionLabel>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              The stack behind every system we ship.
-            </h2>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {techGrid.map((t, i) => (
-              <motion.div key={t.label} {...fadeUp(i * 0.06)}>
-                <div className="glass-card rounded-xl p-5 h-full">
-                  <div className="text-sm font-semibold text-white mb-1">{t.label}</div>
-                  <div className="text-slate-500 text-xs leading-relaxed">{t.detail}</div>
-                </div>
+              <motion.div key={sys.id} {...fadeUp(i * 0.1)}>
+                <Link to={`/products#${sys.id}`} className="block h-full group">
+                  <div
+                    className="rounded-2xl p-8 h-full border border-white/5 transition-all hover:-translate-y-1.5 duration-500 flex flex-col relative overflow-hidden backdrop-blur-sm"
+                    style={{
+                      background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${sys.glow} 0%, transparent 70%), linear-gradient(to bottom right, rgba(10,15,28,0.95), rgba(5,8,15,0.95))`,
+                      boxShadow: `0 0 0 1px ${sys.border} inset, 0 16px 36px -16px rgba(0,0,0,0.5)`,
+                    }}
+                  >
+                    <div
+                      className="absolute top-0 left-0 w-full h-0.5"
+                      style={{ background: `linear-gradient(to right, transparent, ${sys.accent}, transparent)` }}
+                    />
+                    <div className="text-2xl font-black mb-2" style={{ color: sys.accent }}>
+                      {sys.name}
+                    </div>
+                    <div
+                      className="text-[10px] font-extrabold uppercase tracking-widest mb-5"
+                      style={{ color: sys.accent, opacity: 0.85 }}
+                    >
+                      {sys.type}
+                    </div>
+                    <p className="text-slate-300 text-sm leading-relaxed flex-grow mb-8">
+                      {sys.tagline}
+                    </p>
+                    <div className="flex items-center text-xs font-bold text-white/40 group-hover:text-white transition-colors">
+                      Explore {sys.name}{' '}
+                      <ChevronRight size={14} className="ml-1 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -363,71 +440,24 @@ export function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════
-          7. WHY CLIENTS CHOOSE US
+          5. FINAL CTA
       ══════════════════════════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 relative">
-        <div className="absolute inset-0 grid-bg opacity-15 pointer-events-none" />
-        <div className="relative max-w-5xl mx-auto">
-          <motion.div {...fadeUp(0)} className="text-center mb-10">
-            <SectionLabel>Why Clients Choose Us</SectionLabel>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-              Brilliant leaders are drowning in data<br />but starving for insight.
-            </h2>
-          </motion.div>
-
-          {/* Quote */}
-          <motion.div {...fadeUp(0.06)} className="mb-10">
-            <div className="glass-card glow-border rounded-2xl p-7 max-w-3xl mx-auto text-center" style={{ background: 'rgba(8,14,30,0.9)' }}>
-              <p className="text-slate-300 text-base leading-relaxed italic mb-4">
-                "We don't just advise — we build. From strategy to production deployment, in weeks, not quarters."
-              </p>
-              <p className="text-blue-400 text-xs font-semibold">— Dr. Ammar A. Raja, Co-Founder & CTO</p>
-            </div>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {trustCards.map((c, i) => (
-              <motion.div key={c.label} {...fadeUp(i * 0.07)}>
-                <div className="glass-card rounded-xl p-5 h-full">
-                  <div className="w-2 h-2 rounded-full bg-violet-400 mb-3" />
-                  <h3 className="text-white font-semibold text-sm mb-1">{c.label}</h3>
-                  <p className="text-slate-500 text-xs leading-relaxed">{c.detail}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════════════
-          8. FINAL CTA
-      ══════════════════════════════════════════════════════════════ */}
-      <section className="py-20 px-4 sm:px-6">
-        <div className="max-w-3xl mx-auto">
+      <section className="py-28 px-4 sm:px-6 border-t border-white/[0.04]">
+        <div className="max-w-2xl mx-auto text-center">
           <motion.div {...fadeUp(0)}>
-            <div
-              className="glass-card glow-border rounded-2xl p-10 text-center"
-              style={{ background: 'rgba(8,14,30,0.92)' }}
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-5">
+              Not sure where to begin?
+            </h2>
+            <p className="text-slate-400 text-base mb-9 max-w-md mx-auto leading-relaxed">
+              Start with a short intelligence blueprint and map your challenge to the right system.
+            </p>
+            <Button
+              to="/ai-plan"
+              size="lg"
+              className="shadow-[0_0_36px_rgba(59,130,246,0.28)] hover:shadow-[0_0_52px_rgba(59,130,246,0.45)] transition-shadow"
             >
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] uppercase px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/6 text-blue-300 mb-5">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-                Start Here
-              </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-                Get Your AI Intelligence Blueprint
-              </h2>
-              <p className="text-slate-400 text-sm mb-8 max-w-md mx-auto">
-                Answer a few questions and discover the exact systems your business needs.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <Button to="/ai-plan" size="lg">
-                  Start Your AI Plan <ArrowRight size={15} />
-                </Button>
-                <Button to="/contact" variant="ghost" size="lg">
-                  Book a Strategy Call
-                </Button>
-              </div>
-            </div>
+              Start Your AI Plan <ArrowRight size={17} className="ml-2" />
+            </Button>
           </motion.div>
         </div>
       </section>
