@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { GraduationCap, HeartPulse, BarChart3, ShoppingBag, Landmark, Building2, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { GraduationCap, HeartPulse, BarChart3, ShoppingBag, Landmark, Building2, ArrowRight, CheckCircle2, Microscope, Scale, Building, Factory, ShoppingCart, Utensils, Wheat, Leaf, Briefcase, ExternalLink } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/Button'
@@ -14,13 +14,25 @@ const iconMap: Record<string, React.FC<{ size?: number; className?: string }>> =
   'shopping-bag': ShoppingBag,
   landmark: Landmark,
   'building-2': Building2,
+  microscope: Microscope,
+  scale: Scale,
+  building: Building,
+  factory: Factory,
+  'shopping-cart': ShoppingCart,
+  utensils: Utensils,
+  wheat: Wheat,
+  leaf: Leaf,
+  briefcase: Briefcase,
 }
 
-const colorClasses: Record<string, { icon: string; bg: string; badge: 'blue' | 'purple' | 'cyan' | 'indigo' }> = {
+const colorClasses: Record<string, { icon: string; bg: string; badge: 'blue' | 'purple' | 'cyan' | 'indigo' | 'emerald' | 'rose' | 'amber' }> = {
   blue: { icon: 'text-blue-400', bg: 'bg-blue-500/10', badge: 'blue' },
   purple: { icon: 'text-purple-400', bg: 'bg-purple-500/10', badge: 'purple' },
   cyan: { icon: 'text-cyan-400', bg: 'bg-cyan-500/10', badge: 'cyan' },
   indigo: { icon: 'text-indigo-400', bg: 'bg-indigo-500/10', badge: 'indigo' },
+  emerald: { icon: 'text-emerald-400', bg: 'bg-emerald-500/10', badge: 'emerald' },
+  rose: { icon: 'text-rose-400', bg: 'bg-rose-500/10', badge: 'rose' },
+  amber: { icon: 'text-amber-400', bg: 'bg-amber-500/10', badge: 'amber' },
 }
 
 export function Industries() {
@@ -37,8 +49,11 @@ export function Industries() {
               Decision intelligence built for{' '}
               <span className="gradient-text">your sector</span>
             </h1>
-            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto mb-4">
               The challenges are different in every sector. The underlying need is the same — better decisions, backed by intelligence that understands your domain.
+            </p>
+            <p className="text-sm text-slate-500 max-w-2xl mx-auto italic">
+              Some products are existing systems; others represent custom intelligence systems Khaldun can design for sector-specific problems.
             </p>
           </motion.div>
         </div>
@@ -87,14 +102,36 @@ export function Industries() {
                         </ul>
                       </div>
 
-                      {/* Solutions */}
+                      {/* Products & Outcomes */}
                       <div className="lg:col-span-4">
-                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Intelligence Solutions</h3>
-                        <ul className="space-y-2">
-                          {industry.solutions.map((s) => (
-                            <li key={s} className="flex items-start gap-2">
-                              <CheckCircle2 size={14} className="text-green-400 flex-shrink-0 mt-0.5" />
-                              <span className="text-sm text-slate-300 leading-relaxed">{s}</span>
+                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Sector-Specific Intelligence Products</h3>
+                        <ul className="space-y-4">
+                          {industry.products.map((p) => (
+                            <li key={p.name} className="flex flex-col gap-1">
+                              <div className="flex items-start gap-2">
+                                <CheckCircle2 size={14} className="text-green-400 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm text-slate-300 leading-relaxed">{p.name}</span>
+                              </div>
+                              {p.link && (
+                                <a 
+                                  href={p.link} 
+                                  target="_blank" 
+                                  rel="noreferrer" 
+                                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 ml-6 w-fit"
+                                >
+                                  View demo <ExternalLink size={10} />
+                                </a>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+
+                        <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-8 mb-4">Expected Outcomes</h3>
+                        <ul className="space-y-2 mb-6">
+                          {industry.outcomes.map((o) => (
+                            <li key={o} className="flex items-start gap-2 text-sm text-slate-400">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 flex-shrink-0 mt-2" />
+                              {o}
                             </li>
                           ))}
                         </ul>

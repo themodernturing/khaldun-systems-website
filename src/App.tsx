@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import { AppRoutes } from './routes'
 import { ScrollToTop } from './components/ScrollToTop'
+import { AvatarWidget } from './components/avatar'
 
 function HashScrollHelper() {
   const location = useLocation()
@@ -22,6 +23,7 @@ export default function App() {
       <ScrollToTop />
       <HashScrollHelper />
       <AppRoutes />
+      <AvatarWidget />
     </BrowserRouter>
   )
 }

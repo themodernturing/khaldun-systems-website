@@ -88,9 +88,13 @@ const industriesList = [
   'Diagnostic Labs',
   'Finance',
   'Education',
-  'Legal & Professional Services',
-  'Climate & Sustainability',
-  'Enterprise Strategy',
+  'Real Estate',
+  'Manufacturing',
+  'Retail & Hospitality',
+  'Agriculture & Food',
+  'Climate',
+  'Legal',
+  'Business Operations',
 ]
 
 export function Home() {

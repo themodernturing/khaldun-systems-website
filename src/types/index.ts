@@ -110,9 +110,10 @@ export interface Industry {
   name: string
   description: string
   challenges: string[]
-  solutions: string[]
+  products: { name: string; link?: string }[]
+  outcomes: string[]
   icon: string
-  color: 'blue' | 'purple' | 'cyan' | 'indigo'
+  color: 'blue' | 'purple' | 'cyan' | 'indigo' | 'emerald' | 'rose' | 'amber'
 }
 
 export interface EcosystemNode {
